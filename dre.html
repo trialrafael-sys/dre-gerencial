@@ -486,8 +486,8 @@ async function handleFile(file,tipo){
         apelido:String(col(r,['APELIDO'],8)||'').trim().toUpperCase(),
         grupo:String(col(r,['GRUPO'],9)||'').trim(),
         valor:parseFloat(col(r,['VALOR'],5)||0),
-        mes:parseInt(col(r,['MES','MÊS','MÊS ','MES '],0)||0),
-        ano:parseInt(col(r,['ANO'],1)||0)
+       mes:(()=>{const d=col(r,['DATA','data','Data'],1);if(!d)return 0;const dt=new Date(d);return isNaN(dt.getTime())?0:dt.getMonth()+1})(),
+       ano:(()=>{const d=col(r,['DATA','data','Data'],1);if(!d)return 0;const dt=new Date(d);return isNaN(dt.getTime())?0:dt.getFullYear()})(),
       })).filter(r=>r.apelido&&r.valor!==0);
       state.meses=getMeses();
       document.getElementById('z-desp').className='upload-zone ok';
