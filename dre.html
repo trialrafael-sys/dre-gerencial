@@ -655,7 +655,7 @@ async function handleFile(file, tipo) {
       state.carteira = {};
       state.carteiraRows = []; // raw rows with gerente, empresa, total
       rows.forEach(r => {
-        const g = String(r['GERENTE'] || r['gerente'] || r['Gerente'] || '').trim();
+        const g = String(r['GERENTE'] || r['gerente'] || r['Gerente'] || r['AGENTE'] || r['agente'] || r['Agente'] || '').trim();
         if (!g) return;
         const empresa = String(r['EMPRESA'] || r['empresa'] || r['Empresa'] || '').trim();
         const total = parseFloat(r['total'] || r['TOTAL'] || r['Total'] || r['valor'] || 0);
