@@ -1,0 +1,113 @@
+{
+  "_instrucoes": "Para cada APELIDO, defina o CRITERIO de rateio. Valores aceitos: 'Participação Carteira', 'Qtde de Duplicatas', 'Especifica Filial', ou o nome exato de um gerente (ex: 'Lucimar', 'Cabral').",
+
+  "gerentes": ["Sobrinho", "Lucimar", "Cabral", "Rhavi", "Christiano", "Diretoria"],
+
+  "veiculos_receita": ["FIDC SETTORE", "FIDC MULTI", "GRAFO", "Consultora"],
+
+  "filiais": {
+    "_instrucoes": "Para o critério 'Especifica Filial', defina quais gerentes pertencem a cada filial.",
+    "RJ": ["Sobrinho", "Diretoria"],
+    "SP": ["Lucimar", "Cabral", "Rhavi", "Christiano"]
+  },
+
+  "premissas": [
+    { "apelido": "BEECRED TECNOLOGIA",     "grupo": "ADM - CREDITO",         "criterio": "Qtde de Duplicatas" },
+    { "apelido": "CREDITHU",               "grupo": "ADM - CREDITO",         "criterio": "Qtde de Duplicatas" },
+    { "apelido": "GRAFENO ANALYTICS",      "grupo": "ADM - CREDITO",         "criterio": "Qtde de Duplicatas" },
+    { "apelido": "RISK3 TEC. ANALISE",     "grupo": "ADM - CREDITO",         "criterio": "Qtde de Duplicatas" },
+    { "apelido": "SERASA VOLUMETRIA",      "grupo": "ADM - CREDITO",         "criterio": "Qtde de Duplicatas" },
+    { "apelido": "CRDC ASSINATURA",        "grupo": "ADM - CREDITO",         "criterio": "Qtde de Duplicatas" },
+    { "apelido": "ANFAC BACEN",            "grupo": "ADM - CREDITO",         "criterio": "Qtde de Duplicatas" },
+
+    { "apelido": "LICENÇAS RJ",            "grupo": "ADM - INFORMATICA",     "criterio": "Participação Carteira" },
+    { "apelido": "LINK DEDICADO - RJ",     "grupo": "ADM - INFORMATICA",     "criterio": "Participação Carteira" },
+    { "apelido": "LINK DEDICADO - SP",     "grupo": "ADM - INFORMATICA",     "criterio": "Participação Carteira" },
+    { "apelido": "PGTO RHAVI PINTA",       "grupo": "ADM - INFORMATICA",     "criterio": "Participação Carteira" },
+    { "apelido": "SERVICOS TI - RJ",       "grupo": "ADM - INFORMATICA",     "criterio": "Participação Carteira" },
+    { "apelido": "SOFTWARE - RJ",          "grupo": "ADM - INFORMATICA",     "criterio": "Participação Carteira" },
+
+    { "apelido": "ALUGUEL - SP",           "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "ALUGUEL RICARDO",        "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "CONDOMINIO",             "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "CONDOMINIO - SP",        "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "ENERGIA ELETRICA-RJ",    "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "ENERGIA ELETRICA-SP",    "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "SEGURO SALAS",           "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "SEGURO - RJ",            "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "TELEFONE - RJ",          "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "TELEFONE - SP",          "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "IPTU - RJ",              "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "IPTU - SP",              "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+    { "apelido": "TAXA DE INCENDIO-RJ",    "grupo": "ADM - INSTALACOES",     "criterio": "Participação Carteira" },
+
+    { "apelido": "CUSTAS PROCESSUAIS",     "grupo": "ADM - JURIDICO/ADV",    "criterio": "Participação Carteira" },
+    { "apelido": "HON. ADVOCATICIOS",      "grupo": "ADM - JURIDICO/ADV",    "criterio": "Participação Carteira" },
+    { "apelido": "REEMB. CUSTAS ADV",      "grupo": "ADM - JURIDICO/ADV",    "criterio": "Participação Carteira" },
+    { "apelido": "SENTENCA JUDICIAL",      "grupo": "ADM - JURIDICO/ADV",    "criterio": "Participação Carteira" },
+
+    { "apelido": "MATERIAL DE CONSUMO",    "grupo": "ADM - MAT EXPEDIENTE",  "criterio": "Participação Carteira" },
+    { "apelido": "MATERIAL CONSUMO-SP",    "grupo": "ADM - MAT EXPEDIENTE",  "criterio": "Participação Carteira" },
+    { "apelido": "MATERIAL ESCRITORIO",    "grupo": "ADM - MAT EXPEDIENTE",  "criterio": "Participação Carteira" },
+    { "apelido": "MATERIAL DE LIMPEZA",    "grupo": "ADM - MAT EXPEDIENTE",  "criterio": "Participação Carteira" },
+    { "apelido": "LIVROS CONTABEIS",       "grupo": "ADM - MAT EXPEDIENTE",  "criterio": "Participação Carteira" },
+
+    { "apelido": "HOSPEDAGEM - LUCIMAR",   "grupo": "ADM - VIAGEM REPRES",   "criterio": "Lucimar" },
+    { "apelido": "HOSPEDAGEM - MARIANA",   "grupo": "ADM - VIAGEM REPRES",   "criterio": "Lucimar" },
+    { "apelido": "PASSAG.AEREA-LUCIMAR",   "grupo": "ADM - VIAGEM REPRES",   "criterio": "Lucimar" },
+    { "apelido": "PASSAG AEREA-CABRAL",    "grupo": "ADM - VIAGEM REPRES",   "criterio": "Cabral" },
+    { "apelido": "HOSPEDAGEM - LUCIMAR",   "grupo": "ADM - VIAGEM REPRES",   "criterio": "Lucimar" },
+
+    { "apelido": "ASSOCIAÇÕES",            "grupo": "ADM-SERV. TERCEIROS",   "criterio": "Participação Carteira" },
+    { "apelido": "CARTÓRIO - RJ",          "grupo": "ADM-SERV. TERCEIROS",   "criterio": "Participação Carteira" },
+    { "apelido": "CORREIOS ADM",           "grupo": "ADM-SERV. TERCEIROS",   "criterio": "Participação Carteira" },
+    { "apelido": "CORREIOS TELEGRAMAS",    "grupo": "ADM-SERV. TERCEIROS",   "criterio": "Participação Carteira" },
+    { "apelido": "DIARIATA - RJ",          "grupo": "ADM-SERV. TERCEIROS",   "criterio": "Especifica Filial" },
+    { "apelido": "DIARIATA - SP",          "grupo": "ADM-SERV. TERCEIROS",   "criterio": "Especifica Filial" },
+    { "apelido": "DIARIATA CÉLIA 1º QUINZENA", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Especifica Filial" },
+    { "apelido": "ESCRITURAÇÃO FISCAL",    "grupo": "ADM-SERV. TERCEIROS",   "criterio": "Participação Carteira" },
+    { "apelido": "OUTROS PREST. PJ",       "grupo": "ADM-SERV. TERCEIROS",   "criterio": "Participação Carteira" },
+    { "apelido": "PREST. SERV. PJ - SP",   "grupo": "ADM-SERV. TERCEIROS",   "criterio": "Participação Carteira" },
+    { "apelido": "TAXA JUCERJA-RJ",        "grupo": "ADM-SERV. TERCEIROS",   "criterio": "Participação Carteira" },
+
+    { "apelido": "TR MANUTENÇÃO C/C",      "grupo": "BANCARIA - TARIFAS",    "criterio": "Qtde de Duplicatas" },
+    { "apelido": "TR TED/PIX",             "grupo": "BANCARIA - TARIFAS",    "criterio": "Qtde de Duplicatas" },
+    { "apelido": "TR COBRANÇA TITULOS",    "grupo": "BANCARIA - TARIFAS",    "criterio": "Qtde de Duplicatas" },
+    { "apelido": "ANUIDIDADE CARTÃO CRED", "grupo": "BANCARIA - TARIFAS",    "criterio": "Qtde de Duplicatas" },
+    { "apelido": "JUROS ATRASO PGTO",      "grupo": "BANCARIA - TARIFAS",    "criterio": "Qtde de Duplicatas" },
+    { "apelido": "TR RENOV. CADASTRO",     "grupo": "BANCARIA - TARIFAS",    "criterio": "Qtde de Duplicatas" },
+
+    { "apelido": "COMISSÃO - LUCAS",       "grupo": "DIRETORIA - SÓCIOS",    "criterio": "Participação Carteira" },
+    { "apelido": "FIXO - LUCAS",           "grupo": "DIRETORIA - SÓCIOS",    "criterio": "Participação Carteira" },
+    { "apelido": "FIXO - RICARDO",         "grupo": "DIRETORIA - SÓCIOS",    "criterio": "Participação Carteira" },
+    { "apelido": "FIXO -RAFAEL MAGGION",   "grupo": "DIRETORIA - SÓCIOS",    "criterio": "Participação Carteira" },
+    { "apelido": "REEMBOLSO - LUCAS",      "grupo": "DIRETORIA - SÓCIOS",    "criterio": "Participação Carteira" },
+
+    { "apelido": "COFINS A PAGAR",         "grupo": "IMPOSTOS E TRIBUTOS",   "criterio": "Participação Carteira" },
+    { "apelido": "CONTRIBUICAO SOCIAL",    "grupo": "IMPOSTOS E TRIBUTOS",   "criterio": "Participação Carteira" },
+    { "apelido": "DARF REINF FONTE",       "grupo": "IMPOSTOS E TRIBUTOS",   "criterio": "Participação Carteira" },
+    { "apelido": "IMPOSTO DE RENDA -PJ",   "grupo": "IMPOSTOS E TRIBUTOS",   "criterio": "Participação Carteira" },
+    { "apelido": "ISS A PAGAR",            "grupo": "IMPOSTOS E TRIBUTOS",   "criterio": "Participação Carteira" },
+    { "apelido": "PIS A PAGAR",            "grupo": "IMPOSTOS E TRIBUTOS",   "criterio": "Participação Carteira" },
+    { "apelido": "SIMPLES NACIONAL",       "grupo": "IMPOSTOS E TRIBUTOS",   "criterio": "Participação Carteira" },
+    { "apelido": "PARCELAMENTOS RFB",      "grupo": "IMPOSTOS E TRIBUTOS",   "criterio": "Participação Carteira" },
+
+    { "apelido": "PROLABORE",              "grupo": "PROLABORE",             "criterio": "Participação Carteira" },
+
+    { "apelido": "DESP. FIDC LAVORO II",   "grupo": "DESPESAS C/ FUNDOS",    "criterio": "Participação Carteira" },
+    { "apelido": "DESP. EXTRAS FIDC II",   "grupo": "DESPESAS C/ FUNDOS",    "criterio": "Participação Carteira" },
+    { "apelido": "DESP. FIDC SETTORE",     "grupo": "DESPESAS C/ FUNDOS",    "criterio": "Participação Carteira" },
+
+    { "apelido": "MAQ. E EQUIPAMENTOS",    "grupo": "IMOBILIZADO NOVO",      "criterio": "Participação Carteira" },
+
+    { "apelido": "PLANO DE SAUDE",         "grupo": "PESSOAL - BENEFICIOS",  "criterio": "Participação Carteira" },
+    { "apelido": "REEMB. PL. SAUDE",       "grupo": "PESSOAL - BENEFICIOS",  "criterio": "Participação Carteira" },
+
+    { "apelido": "COMISSÃO - FINAXIS",     "grupo": "COMISSÕES - REBATES",   "criterio": "Participação Carteira" },
+    { "apelido": "COMISSÃO - LIMINE",      "grupo": "COMISSÕES - REBATES",   "criterio": "Participação Carteira" },
+    { "apelido": "COMISSÃO - ALFREDO",     "grupo": "COMISSÕES - REBATES",   "criterio": "Lucimar" },
+    { "apelido": "COMISSÃO - ANTECIPA",    "grupo": "COMISSÕES - REBATES",   "criterio": "Rhavi" },
+
+    { "apelido": "DESP. ADM SP",           "grupo": "DESPESAS SÃO PAULO",    "criterio": "Especifica Filial" }
+  ]
+}
