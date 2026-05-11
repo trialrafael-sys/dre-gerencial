@@ -474,7 +474,7 @@ function resetPremissas() {
   document.getElementById('header-meta').textContent = `${config.premissas.length} premissas carregadas`;
 }
 
-
+function renderPremissasPreview() {
   const el = document.getElementById('premissas-preview');
   const grupos = {};
   config.premissas.forEach(p => {
