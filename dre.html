@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRE Gerencial</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f7f7f5;--bg3:#f0efe9;--text:#1a1a18;--text2:#6b6b66;--text3:#9b9b96;
+  --border:rgba(0,0,0,.1);--border2:rgba(0,0,0,.18);
+  --green:#0f6e56;--green-bg:#e1f5ee;--green-text:#085041;
+  --red:#993c1d;--red-bg:#faece7;--red-text:#4a1b0c;
+  --blue:#185fa5;--blue-bg:#e6f1fb;--blue-text:#042c53;
+  --amber:#854f0b;--amber-bg:#faeeda;--amber-text:#412402;
+  --r:8px;--rl:12px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#242422;--bg3:#2e2e2b;--text:#f0efe9;--text2:#9b9b96;--text3:#6b6b66;
+  --border:rgba(255,255,255,.1);--border2:rgba(255,255,255,.18);
+  --green:#5dcaa5;--green-bg:#04342c;--green-text:#9fe1cb;
+  --red:#f0997b;--red-bg:#4a1b0c;--red-text:#f5c4b3;
+  --blue:#85b7eb;--blue-bg:#042c53;--blue-text:#b5d4f4;
+  --amber:#ef9f27;--amber-bg:#412402;--amber-text:#fac775;
+}}
+body{font-family:var(--font);background:var(--bg3);color:var(--text);font-size:15px;line-height:1.6;min-height:100vh}
+header{background:var(--bg);border-bottom:.5px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+header h1{font-size:16px;font-weight:500}
+.meta{font-size:13px;color:var(--text2)}
+.container{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+.steps{display:flex;align-items:center;gap:0;margin-bottom:2rem;background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:1rem 1.5rem;overflow-x:auto}
+.step{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);white-space:nowrap;cursor:pointer;padding:4px 8px;border-radius:var(--r);transition:background .15s}
+.step:hover{background:var(--bg2)}
+.step.active{color:var(--text);font-weight:500}
+.step.done{color:var(--green)}
+.step-num{width:22px;height:22px;border-radius:50%;border:.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.step.active .step-num{background:var(--text);color:var(--bg);border-color:var(--text)}
+.step.done .step-num{background:var(--green-bg);color:var(--green);border-color:transparent}
+.step-arrow{color:var(--text3);margin:0 4px;font-size:12px}
+.progress{height:3px;background:var(--border);border-radius:2px;margin-bottom:2rem;overflow:hidden}
+.progress-fill{height:100%;background:var(--text);border-radius:2px;transition:width .4s ease}
+.card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin-bottom:1.5rem}
+.card-title{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:1rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+@media(max-width:700px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+.metric{background:var(--bg2);border-radius:var(--r);padding:1rem 1.25rem}
+.metric-label{font-size:12px;color:var(--text2);margin-bottom:4px}
+.metric-val{font-size:22px;font-weight:500}
+.metric-val.pos{color:var(--green)}
+.metric-val.neg{color:var(--red)}
+.upload-zone{border:.5px dashed var(--border2);border-radius:var(--r);padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:background .15s,border-color .15s;display:block}
+.upload-zone:hover{background:var(--bg2);border-color:var(--text2)}
+.upload-zone.ok{border-style:solid;border-color:var(--green);background:var(--green-bg)}
+.upload-zone input{display:none}
+.upload-icon{font-size:28px;margin-bottom:6px}
+.upload-hint{font-size:12px;color:var(--text2);margin-top:4px}
+.upload-name{font-size:13px;font-weight:500;color:var(--green-text)}
+button{font-family:var(--font);font-size:14px;font-weight:500;border-radius:var(--r);cursor:pointer;transition:background .15s,opacity .15s;padding:9px 18px;border:.5px solid var(--border2);background:var(--bg);color:var(--text)}
+button:hover{background:var(--bg2)}
+button.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+button.primary:hover{opacity:.85}
+button:disabled{opacity:.4;cursor:not-allowed}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem}
+input[type=number],input[type=text],select{font-family:var(--font);font-size:14px;padding:8px 10px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text)}
+input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(24,95,165,.15)}
+.input-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.input-row label{font-size:13px;color:var(--text2);width:200px;flex-shrink:0}
+.input-row input[type=number]{width:160px}
+.tab-bar{display:flex;gap:2px;border-bottom:.5px solid var(--border);margin-bottom:1.25rem;overflow-x:auto}
+.tab{padding:8px 14px;font-size:13px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--text);font-weight:500;border-bottom-color:var(--text)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-size:11px;font-weight:500;color:var(--text2);text-align:left;padding:8px 12px;border-bottom:.5px solid var(--border);white-space:nowrap}
+td{padding:8px 12px;border-bottom:.5px solid var(--border)}
+tr:last-child td{border-bottom:none}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.pos{color:var(--green)}
+.neg{color:var(--red)}
+.row-group{cursor:pointer;user-select:none}
+.row-group:hover td{background:var(--bg2)}
+.row-group td:first-child::before{content:'▶ ';font-size:10px;color:var(--text3);display:inline-block;transition:transform .2s;width:14px}
+.row-group.open td:first-child::before{transform:rotate(90deg)}
+.row-sub{display:none}
+.row-sub.visible{display:table-row}
+.row-sub td{color:var(--text2);font-size:12px}
+.row-sub td:first-child{padding-left:2rem}
+.row-total td{font-weight:500;border-top:1px solid var(--border2);background:var(--bg3)}
+.row-header td{font-weight:500;background:var(--bg2);font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
+.row-section td{font-weight:500;background:var(--bg3);border-top:.5px solid var(--border2)}
+.row-ignored td{opacity:.4;text-decoration:line-through}
+.row-unmapped td{background:color-mix(in srgb,var(--amber-bg) 40%,transparent)}
+.badge{display:inline-block;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:500}
+.badge-cart{background:var(--blue-bg);color:var(--blue-text)}
+.badge-dup{background:var(--amber-bg);color:var(--amber-text)}
+.badge-fil{background:var(--green-bg);color:var(--green-text)}
+.badge-ger{background:var(--bg3);color:var(--text2)}
+.badge-warn{background:var(--amber-bg);color:var(--amber-text)}
+.badge-err{background:var(--red-bg);color:var(--red-text)}
+.badge-ok{background:var(--green-bg);color:var(--green-text)}
+.notice{padding:10px 14px;border-radius:var(--r);font-size:13px;margin-bottom:1rem}
+.notice.info{background:var(--blue-bg);color:var(--blue-text)}
+.notice.warn{background:var(--amber-bg);color:var(--amber-text)}
+.hidden{display:none!important}
+.search-wrap{position:relative;margin-bottom:1rem}
+.search-wrap input{padding-left:2rem;width:100%}
+.search-icon{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px;pointer-events:none}
+.check-panel{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+@media(max-width:700px){.check-panel{grid-template-columns:1fr}}
+.check-card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:1rem 1.25rem}
+.check-card.ok{border-color:var(--green)}
+.check-card.warn{border-color:var(--amber)}
+.check-card.err{border-color:var(--red)}
+.check-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.check-title{font-size:13px;font-weight:500}
+.check-detail{font-size:12px;color:var(--text2);line-height:1.5}
+.err-line{color:var(--red);font-weight:500}
+.ok-line{color:var(--green)}
+.prem-select{font-family:var(--font);font-size:13px;padding:5px 8px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);cursor:pointer;width:100%}
+.prem-modified{background:color-mix(in srgb,var(--amber-bg) 50%,transparent)!important}
+.tag-mod{display:inline-block;padding:1px 6px;border-radius:100px;font-size:10px;font-weight:500;background:var(--amber-bg);color:var(--amber-text);margin-left:4px;vertical-align:middle}
+.toggle-btn{padding:4px 10px;font-size:12px;border-radius:100px;cursor:pointer;border:.5px solid var(--border2);background:var(--bg);color:var(--text2)}
+.toggle-btn.ignored{background:var(--red-bg);color:var(--red-text);border-color:var(--red)}
+.toggle-btn.active{background:var(--green-bg);color:var(--green-text);border-color:var(--green)}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem}
+.dash-card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);overflow:hidden}
+.dash-card-header{padding:.75rem 1rem;font-size:13px;font-weight:500;background:var(--bg2);border-bottom:.5px solid var(--border)}
+.dash-card-total{padding:.5rem 1rem;font-size:18px;font-weight:500;color:var(--green);border-bottom:.5px solid var(--border)}
+.dash-card-row{display:flex;justify-content:space-between;align-items:center;padding:5px 1rem;font-size:12px;border-bottom:.5px solid var(--border)}
+.dash-card-row:last-child{border-bottom:none}
+.dash-card-row .vname{color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dash-card-row .vval{font-weight:500;font-variant-numeric:tabular-nums}
+.dash-bar{height:3px;background:var(--border);border-radius:2px;margin:0 1rem 8px;overflow:hidden}
+.dash-bar-fill{height:100%;background:var(--green);border-radius:2px}
+#loading{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:999;align-items:center;justify-content:center}
+#loading.show{display:flex}
+.spinner{width:36px;height:36px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.month-filter{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:1rem}
+.month-chip{padding:4px 12px;font-size:12px;border-radius:100px;cursor:pointer;border:.5px solid var(--border2);background:var(--bg);color:var(--text2);transition:all .15s}
+.month-chip:hover{background:var(--bg2)}
+.month-chip.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+</style>
+</head>
+<body>
+<div id="loading"><div class="spinner"></div></div>
+<header>
+  <h1>DRE Gerencial</h1>
+  <span class="meta" id="header-meta">Carregando...</span>
+</header>
+<div class="container">
+  <nav class="steps" id="stepbar">
+    <div class="step active" id="s1" onclick="goStep(1)"><span class="step-num">1</span> Carregar dados</div>
+    <span class="step-arrow">›</span>
+    <div class="step" id="s1b" onclick="state.ready>=1&&goStep('1b')"><span class="step-num">✎</span> Premissas</div>
+    <span class="step-arrow">›</span>
+    <div class="step" id="s2" onclick="state.ready>=2&&goStep(2)"><span class="step-num">2</span> Receitas</div>
+    <span class="step-arrow">›</span>
+    <div class="step" id="s3" onclick="state.ready>=3&&goStep(3)"><span class="step-num">3</span> DRE</div>
+    <span class="step-arrow">›</span>
+    <div class="step" id="s4" onclick="state.ready>=4&&goStep(4)"><span class="step-num">4</span> Auditoria</div>
+  </nav>
+  <div class="progress"><div class="progress-fill" id="prog" style="width:20%"></div></div>
+
+  <!-- PASSO 1 -->
+  <div id="pane1">
+    <div class="card">
+      <div class="card-title">Arquivos do mês</div>
+      <div class="grid2" style="margin-bottom:1.25rem">
+        <div>
+          <div style="font-size:13px;font-weight:500;margin-bottom:8px">Lançamentos de despesas</div>
+          <label class="upload-zone" id="z-desp" for="f-desp">
+            <input type="file" id="f-desp" accept=".xlsx,.xls,.csv">
+            <div class="upload-icon">📊</div>
+            <div style="font-size:13px">Clique ou arraste o arquivo</div>
+            <div class="upload-hint" id="hint-desp">.xlsx ou .csv · colunas: APELIDO, GRUPO, VALOR, MÊS, ANO</div>
+          </label>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:500;margin-bottom:8px">Posição de carteira</div>
+          <label class="upload-zone" id="z-cart" for="f-cart">
+            <input type="file" id="f-cart" accept=".xlsx,.xls,.csv">
+            <div class="upload-icon">📋</div>
+            <div style="font-size:13px">Clique ou arraste o arquivo</div>
+            <div class="upload-hint" id="hint-cart">.xlsx ou .csv · colunas: AGENTE, CARTEIRA%, DUPLICATAS%, EMPRESA</div>
+          </label>
+        </div>
+      </div>
+      <div class="notice info">💡 Ainda não tem os arquivos? Use os dados de demonstração para explorar a ferramenta.</div>
+      <div class="btn-row">
+        <button class="primary" onclick="loadDemo()">▶ Usar dados de demonstração</button>
+        <button id="btn-continuar" disabled onclick="goStep('1b')">Continuar →</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Premissas de rateio carregadas</div>
+      <div id="premissas-preview"></div>
+    </div>
+  </div>
+
+  <!-- PREMISSAS -->
+  <div id="pane1b" class="hidden">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+        <div class="card-title" style="margin:0">Critérios de rateio — edição por conta</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <div class="search-wrap" style="margin:0;width:200px">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="filtro-prem" placeholder="Filtrar conta..." oninput="filtrarPremissas()" style="padding-left:2rem">
+          </div>
+          <select id="filtro-grupo" onchange="filtrarPremissas()" style="font-size:13px;padding:8px 10px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);cursor:pointer">
+            <option value="">Todos os grupos</option>
+          </select>
+          <select id="filtro-status" onchange="filtrarPremissas()" style="font-size:13px;padding:8px 10px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);cursor:pointer">
+            <option value="">Todos</option>
+            <option value="incluir">Incluídos</option>
+            <option value="ignorar">Ignorados</option>
+            <option value="naomapeado">Não mapeados</option>
+          </select>
+        </div>
+      </div>
+      <div class="notice info" style="margin-bottom:1rem">✎ Alterações valem só nesta sessão. Para tornar permanente, edite o <code style="background:var(--bg3);padding:1px 5px;border-radius:4px">premissas.json</code>.</div>
+      <div class="tbl-wrap">
+        <table id="prem-table">
+          <thead><tr>
+            <th>Apelido</th><th>Grupo</th><th style="min-width:200px">Critério de rateio</th>
+            <th>Incluir no DRE</th><th></th>
+          </tr></thead>
+          <tbody id="prem-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button onclick="goStep(1)">← Voltar</button>
+      <button onclick="resetPremissas()" style="color:var(--red)">↺ Restaurar padrão</button>
+      <button onclick="showAddPremissa()" style="background:var(--green);color:#fff;border-color:var(--green)">+ Nova conta</button>
+      <button class="primary" onclick="goStep(2);renderReceitaInputs()">Continuar para receitas →</button>
+    </div>
+  </div>
+
+  <!-- RECEITAS -->
+  <div id="pane2" class="hidden">
+    <div class="card">
+      <div class="card-title">Receitas — preenchimento por mês</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:1.25rem">Informe a receita bruta de cada veículo por mês. Será ponderada pela participação de carteira de cada gerente.</p>
+      <div id="receita-inputs"></div>
+      <div class="btn-row">
+        <button onclick="goStep('1b')">← Voltar</button>
+        <button class="primary" onclick="calcularDRE()">Calcular DRE →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRE -->
+  <div id="pane3" class="hidden">
+    <div class="check-panel" id="check-panel"></div>
+    <div class="grid4" id="metricas" style="margin-bottom:1.5rem"></div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem">
+        <div class="tab-bar" id="tabs" style="margin:0;border:none;flex:1"></div>
+        <div class="month-filter" id="month-filter" style="margin:0"></div>
+      </div>
+      <div id="dre-content"></div>
+    </div>
+    <div class="card" style="margin-top:1.5rem">
+      <div class="card-title">Carteira por gerente × veículo de crédito</div>
+      <div id="dash-veiculos"></div>
+    </div>
+    <div class="btn-row">
+      <button onclick="goStep(2)">← Voltar</button>
+      <button onclick="goStep(4)">Ver auditoria →</button>
+      <button onclick="exportCSV()">⬇ Exportar CSV</button>
+    </div>
+  </div>
+
+  <!-- AUDITORIA -->
+  <div id="pane4" class="hidden">
+    <div class="card">
+      <div class="card-title">Auditoria de rateio — linha a linha</div>
+      <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+        <div class="search-wrap" style="margin:0;flex:1;min-width:200px">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="filtro" placeholder="Filtrar por apelido, grupo ou critério..." oninput="filtrar()" style="padding-left:2rem">
+        </div>
+        <select id="audit-filter-status" onchange="filtrar()" style="font-size:13px;padding:8px 10px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text)">
+          <option value="">Todos</option>
+          <option value="ok">✓ Conferidos</option>
+          <option value="err">⚠ Com erro</option>
+          <option value="unmapped">🔶 Não mapeados</option>
+          <option value="ignored">— Ignorados</option>
+        </select>
+      </div>
+      <div id="unmapped-alert"></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Status</th><th>Apelido</th><th>Grupo</th><th>Critério</th>
+            <th class="num">Total original</th><th class="num">Soma gerentes</th><th class="num">Diferença</th>
+            <th id="ah0" class="num"></th><th id="ah1" class="num"></th><th id="ah2" class="num"></th>
+            <th id="ah3" class="num"></th><th id="ah4" class="num"></th><th id="ah5" class="num"></th>
+          </tr></thead>
+          <tbody id="audit-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button onclick="goStep(3)">← Voltar ao DRE</button>
+      <button onclick="exportCSV()">⬇ Exportar CSV</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const MESES_NOMES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+// ── DRE STRUCTURE (from DRE Gerencial sheet) ──
+const DRE_ESTRUTURA = [
+  { tipo:'secao', label:'(+) RECEITA BRUTA' },
+  { tipo:'receita', label:'FIDC SETTORE', veiculo:'FIDC SETTORE' },
+  { tipo:'receita', label:'FIDC MULTI', veiculo:'FIDC MULTI' },
+  { tipo:'receita', label:'GRAFO', veiculo:'GRAFO' },
+  { tipo:'receita', label:'Consultora', veiculo:'Consultora' },
+  { tipo:'receita', label:'Outras Receitas', veiculo:'Outras Receitas' },
+  { tipo:'secao', label:'DESPESAS ADMINISTRATIVAS' },
+  { tipo:'grupo', label:'ADM - CREDITO', grupo:'ADM - CREDITO' },
+  { tipo:'grupo', label:'ADM - INFORMATICA', grupo:'ADM - INFORMATICA' },
+  { tipo:'grupo', label:'ADM - INSTALACOES', grupo:'ADM - INSTALACOES' },
+  { tipo:'grupo', label:'ADM - JURIDICO/ADV', grupo:'ADM - JURIDICO/ADV' },
+  { tipo:'grupo', label:'ADM - MAT EXPEDIENTE', grupo:'ADM - MAT EXPEDIENTE' },
+  { tipo:'grupo', label:'ADM - VIAGEM REPRES', grupo:'ADM - VIAGEM REPRES' },
+  { tipo:'grupo', label:'ADM-SERV. TERCEIROS', grupo:'ADM-SERV. TERCEIROS' },
+  { tipo:'secao', label:'DESPESAS COM PESSOAL' },
+  { tipo:'grupo', label:'PROLABORE', grupo:'PROLABORE' },
+  { tipo:'grupo', label:'DIRETORIA - SÓCIOS', grupo:'DIRETORIA - SÓCIOS' },
+  { tipo:'grupo', label:'PESSOAL - COMERCIAL', grupo:'PESSOAL - COMERCIAL' },
+  { tipo:'grupo', label:'PESSOAL - CONTAB/ADM', grupo:'PESSOAL - CONTAB/ADM' },
+  { tipo:'secao', label:'DESPESAS TRIBUTÁRIAS' },
+  { tipo:'grupo', label:'IMPOSTOS E TRIBUTOS', grupo:'IMPOSTOS E TRIBUTOS' },
+  { tipo:'grupo', label:'BANCARIA - TARIFAS', grupo:'BANCARIA - TARIFAS' },
+  { tipo:'secao', label:'DESPESAS C/ FUNDOS' },
+  { tipo:'grupo', label:'DESPESAS C/ FUNDOS', grupo:'DESPESAS C/ FUNDOS' },
+  { tipo:'grupo', label:'DESPESAS SÃO PAULO', grupo:'DESPESAS SÃO PAULO' },
+  { tipo:'grupo', label:'COMISSÕES - REBATES', grupo:'COMISSÕES - REBATES' },
+  { tipo:'grupo', label:'IMOBILIZADO NOVO', grupo:'IMOBILIZADO NOVO' },
+  { tipo:'total', label:'RESULTADO' },
+];
+
+const GRUPOS_IGNORAR_DEFAULT = ['BANCARIA','EMPRESAS GRUIPO','DEBÊNTURES','IMPOSTOS DEBÊNTURES','IMOB. INVESTIMENTOS','PARCELAMENTO RECEITA','FUNDO','ESTORNO DE DESPESAS'];
+
+const PREMISSAS_CONFIG = {"_instrucoes": "Critérios: 'Participação Carteira', 'Qtde de Duplicatas', 'Especifica Filial', ou nome do gerente. Use 'ignorar': true para excluir do DRE.", "gerentes": ["Sobrinho", "Lucimar", "Cabral", "Rhavi", "Christiano", "Diretoria"], "veiculos_receita": ["FIDC SETTORE", "FIDC MULTI", "GRAFO", "Consultora"], "filiais": {"RJ": ["Sobrinho", "Diretoria"], "SP": ["Lucimar", "Cabral", "Rhavi", "Christiano"]}, "premissas": [{"apelido": "ANFAC BACEN", "grupo": "ADM - CREDITO", "criterio": "Qtde de Duplicatas"}, {"apelido": "BEECRED TECNOLOGIA", "grupo": "ADM - CREDITO", "criterio": "Qtde de Duplicatas"}, {"apelido": "CREDITHUB", "grupo": "ADM - CREDITO", "criterio": "Qtde de Duplicatas"}, {"apelido": "GRAFENO ANALYTICS", "grupo": "ADM - CREDITO", "criterio": "Qtde de Duplicatas"}, {"apelido": "RISK3 TEC. ANALISE", "grupo": "ADM - CREDITO", "criterio": "Qtde de Duplicatas"}, {"apelido": "CORREIOS TELEGRAMAS", "grupo": "ADM - CREDITO", "criterio": "Qtde de Duplicatas"}, {"apelido": "FINANBLUE", "grupo": "ADM - CREDITO", "criterio": "Qtde de Duplicatas"}, {"apelido": "SERASA VOLUMETRIA", "grupo": "ADM - CREDITO", "criterio": "Qtde de Duplicatas"}, {"apelido": "CRDC ASSINATURA", "grupo": "ADM - CREDITO", "criterio": "Qtde de Duplicatas"}, {"apelido": "LICENÇAS RJ", "grupo": "ADM - INFORMATICA", "criterio": "Participação Carteira"}, {"apelido": "LINK DEDICADO - RJ", "grupo": "ADM - INFORMATICA", "criterio": "Participação Carteira"}, {"apelido": "LINK DEDICADO - SP", "grupo": "ADM - INFORMATICA", "criterio": "Participação Carteira"}, {"apelido": "PGTO RHAVI PINTA", "grupo": "ADM - INFORMATICA", "criterio": "Rhavi"}, {"apelido": "SERVICOS TI - RJ", "grupo": "ADM - INFORMATICA", "criterio": "Participação Carteira"}, {"apelido": "SOFTWARE - RJ", "grupo": "ADM - INFORMATICA", "criterio": "Participação Carteira"}, {"apelido": "ALUGUEL - SP", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "ALUGUEL RICARDO", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "CONDOMINIO", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "CONDOMINIO - SP", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "IPTU - RJ", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "IPTU - SP", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "ENERGIA ELETRICA-SP", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "ENERGIA ELETRICA-RJ", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "TAXA DE INCENDIO-SP", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "TAXA DE INCENDIO-RJ", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "SEGUROS - RJ", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "TELEFONE - RJ", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "TELEFONE - SP", "grupo": "ADM - INSTALACOES", "criterio": "Participação Carteira"}, {"apelido": "CUSTAS PROCESSUAIS", "grupo": "ADM - JURIDICO/ADV", "criterio": "Participação Carteira"}, {"apelido": "HON. ADVOCATICIOS", "grupo": "ADM - JURIDICO/ADV", "criterio": "Participação Carteira"}, {"apelido": "REEMB. CUSTAS ADV", "grupo": "ADM - JURIDICO/ADV", "criterio": "Participação Carteira"}, {"apelido": "SENTENCA JUDICIAL", "grupo": "ADM - JURIDICO/ADV", "criterio": "Participação Carteira"}, {"apelido": "LIVROS CONTABEIS", "grupo": "ADM - MAT EXPEDIENTE", "criterio": "Participação Carteira"}, {"apelido": "MATERIAL CONSUMO-SP", "grupo": "ADM - MAT EXPEDIENTE", "criterio": "Participação Carteira"}, {"apelido": "MATERIAL DE LIMPEZA", "grupo": "ADM - MAT EXPEDIENTE", "criterio": "Participação Carteira"}, {"apelido": "MATERIAL DE CONSUMO", "grupo": "ADM - MAT EXPEDIENTE", "criterio": "Participação Carteira"}, {"apelido": "MATERIAL ESCRITORIO", "grupo": "ADM - MAT EXPEDIENTE", "criterio": "Participação Carteira"}, {"apelido": "ESTORNO COMPRAS", "grupo": "ADM - MAT EXPEDIENTE", "criterio": "Participação Carteira"}, {"apelido": "HOSPEDAGEM - LUCIMAR", "grupo": "ADM - VIAGEM REPRES", "criterio": "Lucimar"}, {"apelido": "HOSPEDAGEM - MARIANA", "grupo": "ADM - VIAGEM REPRES", "criterio": "Lucimar"}, {"apelido": "PASSAG AEREA-CABRAL", "grupo": "ADM - VIAGEM REPRES", "criterio": "Cabral"}, {"apelido": "PASSAG.AEREA-LUCIMAR", "grupo": "ADM - VIAGEM REPRES", "criterio": "Lucimar"}, {"apelido": "ASSOCIAÇÕES", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Participação Carteira"}, {"apelido": "CORREIOS ADM", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Participação Carteira"}, {"apelido": "CARTÓRIO - RJ", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Participação Carteira"}, {"apelido": "DIARISTA - RJ", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Especifica Filial"}, {"apelido": "DIARISTA - SP", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Especifica Filial"}, {"apelido": "CERTIFICADO DIGITAL", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Participação Carteira"}, {"apelido": "ESCRITURAÇÃO FISCAL", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Participação Carteira"}, {"apelido": "TAXA JUCERJA-RJ", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Participação Carteira"}, {"apelido": "OUTROS PREST. PJ", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Participação Carteira"}, {"apelido": "PREST. SERV. PJ - SP", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Participação Carteira"}, {"apelido": "PLANO DE SAUDE", "grupo": "ADM-SERV. TERCEIROS", "criterio": "Participação Carteira"}, {"apelido": "PROLABORE", "grupo": "PROLABORE", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - LUCAS", "grupo": "DIRETORIA - SÓCIOS", "criterio": "Participação Carteira"}, {"apelido": "FIXO - LUCAS", "grupo": "DIRETORIA - SÓCIOS", "criterio": "Participação Carteira"}, {"apelido": "FIXO - RICARDO", "grupo": "DIRETORIA - SÓCIOS", "criterio": "Participação Carteira"}, {"apelido": "FIXO -RAFAEL MAGGION", "grupo": "DIRETORIA - SÓCIOS", "criterio": "Participação Carteira"}, {"apelido": "REEMBOLSO - LUCAS", "grupo": "DIRETORIA - SÓCIOS", "criterio": "Participação Carteira"}, {"apelido": "REEMBOLSO - RICARDO", "grupo": "DIRETORIA - SÓCIOS", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO-CHRISTIANO", "grupo": "PESSOAL - COMERCIAL", "criterio": "Christiano"}, {"apelido": "BENEFICIO - CABRAL", "grupo": "PESSOAL - COMERCIAL", "criterio": "Cabral"}, {"apelido": "BENEFICIO - KAREN", "grupo": "PESSOAL - COMERCIAL", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - LUCELIA", "grupo": "PESSOAL - COMERCIAL", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - LUCIMAR", "grupo": "PESSOAL - COMERCIAL", "criterio": "Lucimar"}, {"apelido": "BENEFICIO - RHAVI", "grupo": "PESSOAL - COMERCIAL", "criterio": "Rhavi"}, {"apelido": "BENEFICIO -SOBRINHO", "grupo": "PESSOAL - COMERCIAL", "criterio": "Sobrinho"}, {"apelido": "COMISSÃO - CABRAL", "grupo": "PESSOAL - COMERCIAL", "criterio": "Cabral"}, {"apelido": "COMISSÃO - KAREN", "grupo": "PESSOAL - COMERCIAL", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - LUCELIA", "grupo": "PESSOAL - COMERCIAL", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - LUCIMAR", "grupo": "PESSOAL - COMERCIAL", "criterio": "Lucimar"}, {"apelido": "COMISSÃO - RHAVI", "grupo": "PESSOAL - COMERCIAL", "criterio": "Rhavi"}, {"apelido": "COMISSÃO - SOBRINHO", "grupo": "PESSOAL - COMERCIAL", "criterio": "Sobrinho"}, {"apelido": "COMISSÃO -CHRISTIANO", "grupo": "PESSOAL - COMERCIAL", "criterio": "Christiano"}, {"apelido": "FIXO - CABRAL", "grupo": "PESSOAL - COMERCIAL", "criterio": "Cabral"}, {"apelido": "FIXO - CHRISTIANO", "grupo": "PESSOAL - COMERCIAL", "criterio": "Christiano"}, {"apelido": "FIXO - KAREN DANTAS", "grupo": "PESSOAL - COMERCIAL", "criterio": "Participação Carteira"}, {"apelido": "FIXO - LUCELIA", "grupo": "PESSOAL - COMERCIAL", "criterio": "Participação Carteira"}, {"apelido": "FIXO - LUCIMAR", "grupo": "PESSOAL - COMERCIAL", "criterio": "Lucimar"}, {"apelido": "FIXO - RHAVI PINTA", "grupo": "PESSOAL - COMERCIAL", "criterio": "Rhavi"}, {"apelido": "FIXO - SOBRINHO", "grupo": "PESSOAL - COMERCIAL", "criterio": "Sobrinho"}, {"apelido": "REEMBOLSO - CABRAL", "grupo": "PESSOAL - COMERCIAL", "criterio": "Cabral"}, {"apelido": "REEMBOLSO-CHRISTIANO", "grupo": "PESSOAL - COMERCIAL", "criterio": "Christiano"}, {"apelido": "REEMBOLSO - LUCIMAR", "grupo": "PESSOAL - COMERCIAL", "criterio": "Lucimar"}, {"apelido": "BENEFICIO  - CARLOS", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - ROBERTO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - CARLOS", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "DESP. EXTRAS CONTAB", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - CARLOS AFONSO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - ROBERTO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "REEMBOLSO - CARLOS", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "REEMBOLSO - ROBERTO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "REEMBOLSO CONTABIL", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO-LUIS ANTON", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - ISIS", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - ISIS", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO -LUIS ANTON", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - ISIS JENIFER", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - LUIS ANTONIO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "REEMB - L. ANTONIO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - ALEX", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - LUIZA", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - MARIANA", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Lucimar"}, {"apelido": "COMISSÃO  - ALEX", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - LUIZA", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - ALEX", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - LUIZA", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - MARIANA", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Lucimar"}, {"apelido": "REEMBOLSO - ALEX", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "REEMBOLSO - MARIANA", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Lucimar"}, {"apelido": "BENEFICIO - ADRIANA", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - CHICO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - FLAVIO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - LEONARDO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - ADRIANA", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - LEONARDO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - CHICO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - FLAVIO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - CHICO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - ADRIANA", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - FLAVIO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - LEONARDO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIOS - CELSO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - CLAUDIO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "BENEFICIO - DELARUE", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - CELSO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - DELARUE", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - CLAUDIO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - CELSO", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "FIXO - DELARUE", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "REEMBOLSO - DELARUE", "grupo": "PESSOAL - CONTAB/ADM", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - ALFREDO", "grupo": "COMISSÕES - REBATES", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - ANTECIPA", "grupo": "COMISSÕES - REBATES", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - FELIPE", "grupo": "COMISSÕES - REBATES", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - FINAXIS", "grupo": "COMISSÕES - REBATES", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - LIMINE", "grupo": "COMISSÕES - REBATES", "criterio": "Participação Carteira"}, {"apelido": "PROGREDIR - IDTRUST", "grupo": "COMISSÕES - REBATES", "criterio": "Participação Carteira"}, {"apelido": "COMISSÃO - MENESTYS", "grupo": "COMISSÕES - REBATES", "criterio": "Participação Carteira"}, {"apelido": "ANUIDADE CARTÃO CRED", "grupo": "BANCARIA - TARIFAS", "criterio": "Qtde de Duplicatas"}, {"apelido": "ESTORNO TR INDEVIDA", "grupo": "BANCARIA - TARIFAS", "criterio": "Qtde de Duplicatas"}, {"apelido": "JUROS ATRASO PGTO", "grupo": "BANCARIA - TARIFAS", "criterio": "Qtde de Duplicatas"}, {"apelido": "TR COBRANÇA TITULOS", "grupo": "BANCARIA - TARIFAS", "criterio": "Qtde de Duplicatas"}, {"apelido": "TR MANUTENÇÃO C/C", "grupo": "BANCARIA - TARIFAS", "criterio": "Qtde de Duplicatas"}, {"apelido": "TR. CARTÓRIO/PROT", "grupo": "BANCARIA - TARIFAS", "criterio": "Qtde de Duplicatas"}, {"apelido": "TR RENOV. CADASTRO", "grupo": "BANCARIA - TARIFAS", "criterio": "Qtde de Duplicatas"}, {"apelido": "DESPESA DE CARTÓRIO", "grupo": "BANCARIA - TARIFAS", "criterio": "Qtde de Duplicatas"}, {"apelido": "TR TED/PIX", "grupo": "BANCARIA - TARIFAS", "criterio": "Qtde de Duplicatas"}, {"apelido": "DESP. BANC - CTA GAR", "grupo": "BANCARIA - TARIFAS", "criterio": "Qtde de Duplicatas", "ignorar": true}, {"apelido": "JUROS S/ CTA GAR", "grupo": "BANCARIA - TARIFAS", "criterio": "Qtde de Duplicatas", "ignorar": true}, {"apelido": "COFINS A PAGAR", "grupo": "IMPOSTOS E TRIBUTOS", "criterio": "Participação Carteira"}, {"apelido": "CONTRIBUICAO SOCIAL", "grupo": "IMPOSTOS E TRIBUTOS", "criterio": "Participação Carteira"}, {"apelido": "DARF REINF FONTE", "grupo": "IMPOSTOS E TRIBUTOS", "criterio": "Participação Carteira"}, {"apelido": "IMPOSTO DE RENDA -PJ", "grupo": "IMPOSTOS E TRIBUTOS", "criterio": "Participação Carteira"}, {"apelido": "ISS A PAGAR", "grupo": "IMPOSTOS E TRIBUTOS", "criterio": "Participação Carteira"}, {"apelido": "PARCELAMENTOS RFB", "grupo": "IMPOSTOS E TRIBUTOS", "criterio": "Participação Carteira"}, {"apelido": "PIS A PAGAR", "grupo": "IMPOSTOS E TRIBUTOS", "criterio": "Participação Carteira"}, {"apelido": "SIMPLES NACIONAL", "grupo": "IMPOSTOS E TRIBUTOS", "criterio": "Participação Carteira"}, {"apelido": "REEMB. PL. SAUDE", "grupo": "IMPOSTOS E TRIBUTOS", "criterio": "Participação Carteira"}, {"apelido": "DESP. ADM SP", "grupo": "DESPESAS SÃO PAULO", "criterio": "Participação Carteira"}, {"apelido": "DESP. EXTRA FIC FIDC", "grupo": "DESPESAS C/ FUNDOS", "criterio": "Participação Carteira"}, {"apelido": "DESP. EXTRAS FIDC II", "grupo": "DESPESAS C/ FUNDOS", "criterio": "Participação Carteira"}, {"apelido": "DESP. FIDC LAVORO II", "grupo": "DESPESAS C/ FUNDOS", "criterio": "Participação Carteira"}, {"apelido": "DESP. FIDC SETTORE", "grupo": "DESPESAS C/ FUNDOS", "criterio": "Participação Carteira"}, {"apelido": "DESPESA - FIC FIDC", "grupo": "DESPESAS C/ FUNDOS", "criterio": "Participação Carteira"}, {"apelido": "MAQ. E EQUIPAMENTOS", "grupo": "IMOBILIZADO NOVO", "criterio": "Participação Carteira"}, {"apelido": "IMOB. INVESTIMENTOS", "grupo": "IMOBILIZADO NOVO", "criterio": "Participação Carteira", "ignorar": true}, {"apelido": "CONSORCIO- B. BRASIL", "grupo": "IMOBILIZADO NOVO", "criterio": "Participação Carteira", "ignorar": true}, {"apelido": "IMPOSTOS DEBÊNTURES", "grupo": "IMOBILIZADO NOVO", "criterio": "Participação Carteira", "ignorar": true}, {"apelido": "IRRF S/ RESGATES", "grupo": "IMOBILIZADO NOVO", "criterio": "Participação Carteira", "ignorar": true}]};
+
+let config = null;
+let state = { ready:1, despesas:[], carteira:{}, carteiraRows:[], receitas:{}, dre:{}, auditRows:[], checks:[], meses:[], mesAtivo:'todos', currentStep:1 };
+
+const TOLERANCE = 0.01;
+const CRITERIOS_FIXOS = ['Participação Carteira','Qtde de Duplicatas','Especifica Filial'];
+
+function fmt(v){if(v===undefined||v===null||isNaN(v))return'—';const s=Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});return(v<0?'-':'')+' R$ '+s}
+function fmtN(v){if(v===undefined||v===null||isNaN(v))return'—';const s=Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});return(v<0?'-':'')+s}
+function cls(v){return v>=0?'pos':'neg'}
+function loading(on){document.getElementById('loading').className=on?'show':''}
+
+function init(){
+  config=JSON.parse(JSON.stringify(PREMISSAS_CONFIG));
+  // add ignore flag — groups in default ignore list start ignored
+  const ignoreGrupos = new Set(GRUPOS_IGNORAR_DEFAULT);
+  config.premissas.forEach(p=>{
+    if(p._ignorar===undefined) p._ignorar = p.ignorar || ignoreGrupos.has(p.grupo);
+  });
+  document.getElementById('header-meta').textContent=`${config.premissas.length} premissas carregadas`;
+  renderPremissasPreview();
+  renderAuditHeaders();
+}
+
+function renderAuditHeaders(){
+  if(!config)return;
+  config.gerentes.forEach((g,i)=>{const el=document.getElementById('ah'+i);if(el)el.textContent=g});
+}
+
+function goStep(n){
+  state.currentStep=n;
+  ['pane1','pane1b','pane2','pane3','pane4'].forEach(p=>{const el=document.getElementById(p);if(el)el.className='hidden'});
+  ['s1','s1b','s2','s3','s4'].forEach(s=>{const el=document.getElementById(s);if(el)el.className='step'});
+  if(n==='1b'){
+    document.getElementById('pane1b').className='';
+    document.getElementById('s1b').className='step active';
+    renderPremissasEditor();
+  } else {
+    document.getElementById('pane'+n).className='';
+    document.getElementById('s'+n).className='step active';
+  }
+  const order=[1,'1b',2,3,4];
+  const cur=order.indexOf(n);
+  order.forEach((s,i)=>{const el=document.getElementById('s'+s);if(!el)return;if(i<cur)el.className='step done'});
+  const pct={1:20,'1b':40,2:55,3:75,4:100};
+  document.getElementById('prog').style.width=(pct[n]||20)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── DEMO DATA ──
+const DEMO_DESPESAS=[
+  {apelido:'BEECRED TECNOLOGIA',grupo:'ADM - CREDITO',valor:-350,mes:2,ano:2026},
+  {apelido:'CREDITHU',grupo:'ADM - CREDITO',valor:-1421.49,mes:2,ano:2026},
+  {apelido:'GRAFENO ANALYTICS',grupo:'ADM - CREDITO',valor:-1468.36,mes:2,ano:2026},
+  {apelido:'RISK3 TEC. ANALISE',grupo:'ADM - CREDITO',valor:-1112.12,mes:2,ano:2026},
+  {apelido:'SERASA VOLUMETRIA',grupo:'ADM - CREDITO',valor:-9265.25,mes:2,ano:2026},
+  {apelido:'CRDC ASSINATURA',grupo:'ADM - CREDITO',valor:-4634.56,mes:2,ano:2026},
+  {apelido:'LICENÇAS RJ',grupo:'ADM - INFORMATICA',valor:-8578.85,mes:2,ano:2026},
+  {apelido:'LINK DEDICADO - RJ',grupo:'ADM - INFORMATICA',valor:-1349.56,mes:2,ano:2026},
+  {apelido:'SOFTWARE - RJ',grupo:'ADM - INFORMATICA',valor:-6690,mes:2,ano:2026},
+  {apelido:'ALUGUEL - SP',grupo:'ADM - INSTALACOES',valor:-20207.37,mes:2,ano:2026},
+  {apelido:'CONDOMINIO',grupo:'ADM - INSTALACOES',valor:-5975.24,mes:2,ano:2026},
+  {apelido:'ENERGIA ELETRICA-RJ',grupo:'ADM - INSTALACOES',valor:-2341.58,mes:2,ano:2026},
+  {apelido:'CUSTAS PROCESSUAIS',grupo:'ADM - JURIDICO/ADV',valor:-10402.53,mes:2,ano:2026},
+  {apelido:'HON. ADVOCATICIOS',grupo:'ADM - JURIDICO/ADV',valor:-21000,mes:2,ano:2026},
+  {apelido:'MATERIAL DE CONSUMO',grupo:'ADM - MAT EXPEDIENTE',valor:-1338.28,mes:2,ano:2026},
+  {apelido:'MATERIAL ESCRITORIO',grupo:'ADM - MAT EXPEDIENTE',valor:-1489.56,mes:2,ano:2026},
+  {apelido:'HOSPEDAGEM - LUCIMAR',grupo:'ADM - VIAGEM REPRES',valor:-636.30,mes:2,ano:2026},
+  {apelido:'PASSAG AEREA-CABRAL',grupo:'ADM - VIAGEM REPRES',valor:-610.61,mes:2,ano:2026},
+  {apelido:'ASSOCIAÇÕES',grupo:'ADM-SERV. TERCEIROS',valor:-1794,mes:2,ano:2026},
+  {apelido:'ESCRITURAÇÃO FISCAL',grupo:'ADM-SERV. TERCEIROS',valor:-680.04,mes:2,ano:2026},
+  {apelido:'FIXO - LUCAS',grupo:'DIRETORIA - SÓCIOS',valor:-16000,mes:2,ano:2026},
+  {apelido:'FIXO - RICARDO',grupo:'DIRETORIA - SÓCIOS',valor:-30000,mes:2,ano:2026},
+  {apelido:'COMISSÃO - LUCAS',grupo:'DIRETORIA - SÓCIOS',valor:-8174.70,mes:2,ano:2026},
+  {apelido:'COMISSÃO - SOBRINHO',grupo:'PESSOAL - COMERCIAL',valor:-15411.81,mes:2,ano:2026},
+  {apelido:'COMISSÃO - LUCIMAR',grupo:'PESSOAL - COMERCIAL',valor:-22292.01,mes:2,ano:2026},
+  {apelido:'COMISSÃO - CABRAL',grupo:'PESSOAL - COMERCIAL',valor:-19000,mes:2,ano:2026},
+  {apelido:'FIXO - SOBRINHO',grupo:'PESSOAL - COMERCIAL',valor:-3200,mes:2,ano:2026},
+  {apelido:'FIXO - LUCIMAR',grupo:'PESSOAL - COMERCIAL',valor:-9105.6,mes:2,ano:2026},
+  {apelido:'ISS A PAGAR',grupo:'IMPOSTOS E TRIBUTOS',valor:-3200,mes:2,ano:2026},
+  {apelido:'COFINS A PAGAR',grupo:'IMPOSTOS E TRIBUTOS',valor:-4800,mes:2,ano:2026},
+  {apelido:'PROLABORE',grupo:'PROLABORE',valor:-1500,mes:2,ano:2026},
+  // Janeiro
+  {apelido:'BEECRED TECNOLOGIA',grupo:'ADM - CREDITO',valor:-350,mes:1,ano:2026},
+  {apelido:'SERASA VOLUMETRIA',grupo:'ADM - CREDITO',valor:-8265.14,mes:1,ano:2026},
+  {apelido:'ALUGUEL - SP',grupo:'ADM - INSTALACOES',valor:-18801.77,mes:1,ano:2026},
+  {apelido:'HON. ADVOCATICIOS',grupo:'ADM - JURIDICO/ADV',valor:-13000,mes:1,ano:2026},
+  {apelido:'FIXO - LUCAS',grupo:'DIRETORIA - SÓCIOS',valor:-16000,mes:1,ano:2026},
+  {apelido:'FIXO - RICARDO',grupo:'DIRETORIA - SÓCIOS',valor:-30000,mes:1,ano:2026},
+  {apelido:'COMISSÃO - SOBRINHO',grupo:'PESSOAL - COMERCIAL',valor:-15938.33,mes:1,ano:2026},
+  {apelido:'COMISSÃO - LUCIMAR',grupo:'PESSOAL - COMERCIAL',valor:-12668.71,mes:1,ano:2026},
+];
+const DEMO_CARTEIRA={Sobrinho:{carteira:.172,duplicatas:.156,filiais:['RJ']},Lucimar:{carteira:.310,duplicatas:.282,filiais:['SP','RJ']},Cabral:{carteira:.0466,duplicatas:.0424,filiais:['SP']},Rhavi:{carteira:.0622,duplicatas:.0566,filiais:['SP']},Christiano:{carteira:.0326,duplicatas:.0296,filiais:['SP']},Diretoria:{carteira:.3766,duplicatas:.3434,filiais:['RJ','SP']}};
+const DEMO_CARTEIRA_ROWS=[{gerente:'Sobrinho',empresa:'FIDC MULTI',total:4200000},{gerente:'Sobrinho',empresa:'FIDC SETTORE',total:2100000},{gerente:'Lucimar',empresa:'FIDC MULTI',total:7800000},{gerente:'Lucimar',empresa:'FIDC SETTORE',total:3900000},{gerente:'Cabral',empresa:'FIDC MULTI',total:1100000},{gerente:'Rhavi',empresa:'FIDC MULTI',total:1500000},{gerente:'Christiano',empresa:'FIDC MULTI',total:820000},{gerente:'Diretoria',empresa:'FIDC MULTI',total:9300000},{gerente:'Diretoria',empresa:'FIDC SETTORE',total:4800000}];
+const DEMO_RECEITAS={1:{2026:{'FIDC SETTORE':-176321.85,'FIDC MULTI':843430.38,'GRAFO':378652.97,'Consultora':913230.31}},2:{2026:{'FIDC SETTORE':-159210.99,'FIDC MULTI':446854.28,'GRAFO':699931.10,'Consultora':1088774.31}}};
+
+function loadDemo(){
+  state.despesas=DEMO_DESPESAS;
+  state.carteira=DEMO_CARTEIRA;
+  state.carteiraRows=DEMO_CARTEIRA_ROWS;
+  state.receitas=DEMO_RECEITAS;
+  state.meses=getMeses();
+  state.ready=2;
+  document.getElementById('btn-continuar').disabled=false;
+  goStep('1b');
+}
+
+// ── UPLOAD ──
+function setupUploads(){
+  document.getElementById('f-desp').onchange=e=>handleFile(e.target.files[0],'desp');
+  document.getElementById('f-cart').onchange=e=>handleFile(e.target.files[0],'cart');
+}
+
+async function handleFile(file,tipo){
+  if(!file)return;
+  loading(true);
+  try{
+    const buf=await file.arrayBuffer();
+    const wb=XLSX.read(buf);
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rawRows=XLSX.utils.sheet_to_json(ws,{defval:'',header:1});
+    const first=rawRows[0]||[];
+    const hasHeader=first.some(c=>['APELIDO','GRUPO','VALOR','apelido','grupo','valor'].includes(String(c).trim()));
+    const hdr=hasHeader?rawRows[0].map(h=>String(h).trim().toUpperCase()):null;
+    const dataRows=hasHeader?rawRows.slice(1):rawRows;
+    const col=(row,names,fallbackIdx)=>{
+      if(hdr){const i=hdr.findIndex(h=>names.includes(h));return i>=0?row[i]:'';}
+      return row[fallbackIdx]??'';
+    };
+    if(tipo==='desp'){
+      state.despesas=dataRows.map(r=>({
+        apelido:String(col(r,['APELIDO'],8)||'').trim().toUpperCase(),
+        grupo:String(col(r,['GRUPO'],9)||'').trim(),
+        valor:parseFloat(col(r,['VALOR'],5)||0),
+        mes:parseInt(col(r,['MES','MÊS','MÊS ','MES '],0)||0),
+        ano:parseInt(col(r,['ANO'],1)||0)
+      })).filter(r=>r.apelido&&r.valor!==0);
+      state.meses=getMeses();
+      document.getElementById('z-desp').className='upload-zone ok';
+      document.getElementById('hint-desp').innerHTML=`<span class="upload-name">✓ ${state.despesas.length} lançamentos · ${state.meses.length} mês(es)</span>`;
+    } else {
+      state.carteira={};state.carteiraRows=[];
+      const rawByG={};
+      let totalGeral=0,totalDups=0;
+      dataRows.forEach(r=>{
+        const g=String(col(r,['AGENTE','agente','GERENTE','gerente'],17)||'').trim();
+        if(!g)return;
+        const empresa=String(col(r,['EMPRESA','empresa'],11)||'').trim();
+        const total=parseFloat(col(r,['TOTAL','total'],12)||col(r,['VALOR','valor'],23)||0);
+        if(!rawByG[g])rawByG[g]={total:0,dups:0};
+        rawByG[g].total+=total;
+        rawByG[g].dups+=1;
+        totalGeral+=total;
+        totalDups+=1;
+        if(empresa)state.carteiraRows.push({gerente:g,empresa,total});
+      });
+      // Calcular % e atualizar lista de gerentes dinamicamente
+      config.gerentes=[...Object.keys(rawByG)];
+      Object.entries(rawByG).forEach(([g,v])=>{
+        state.carteira[g]={
+          carteira:totalGeral>0?v.total/totalGeral:0,
+          duplicatas:totalDups>0?v.dups/totalDups:0,
+          filiais:[]
+        };
+      });
+      renderAuditHeaders();
+      document.getElementById('z-cart').className='upload-zone ok';
+      document.getElementById('hint-cart').innerHTML=`<span class="upload-name">✓ ${Object.keys(state.carteira).length} gerentes carregados</span>`;
+    }
+    if(state.despesas.length>0&&Object.keys(state.carteira).length>0){
+      state.ready=2;document.getElementById('btn-continuar').disabled=false;goStep('1b');
+    }
+  }catch(e){alert('Erro ao ler arquivo: '+e.message);}
+  loading(false);
+}
+
+function getMeses(){
+  const set=new Set();
+  state.despesas.forEach(d=>{if(d.mes&&d.ano)set.add(`${d.ano}-${String(d.mes).padStart(2,'0')}`)});
+  return [...set].sort();
+}
+
+// ── PREMISSAS PREVIEW ──
+function renderPremissasPreview(){
+  const el=document.getElementById('premissas-preview');
+  if(!el)return;
+  const counts={'Participação Carteira':0,'Qtde de Duplicatas':0,'Especifica Filial':0,'Gerente específico':0,'Ignorados':0};
+  config.premissas.forEach(p=>{
+    if(p._ignorar){counts['Ignorados']++;return;}
+    if(counts[p.criterio]!==undefined)counts[p.criterio]++;
+    else counts['Gerente específico']++;
+  });
+  el.innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem">
+    <span class="badge badge-cart">Carteira: ${counts['Participação Carteira']}</span>
+    <span class="badge badge-dup">Duplicatas: ${counts['Qtde de Duplicatas']}</span>
+    <span class="badge badge-fil">Filial: ${counts['Especifica Filial']}</span>
+    <span class="badge badge-ger">Gerente: ${counts['Gerente específico']}</span>
+    <span class="badge badge-err">Ignorados: ${counts['Ignorados']}</span>
+  </div>
+  <p style="font-size:12px;color:var(--text2)">${config.premissas.length} contas configuradas em ${new Set(config.premissas.map(p=>p.grupo)).size} grupos</p>`;
+}
+
+// ── PREMISSAS EDITOR ──
+function renderPremissasEditor(){
+  const grupos=[...new Set(config.premissas.map(p=>p.grupo))].sort();
+  const sel=document.getElementById('filtro-grupo');
+  sel.innerHTML='<option value="">Todos os grupos</option>'+grupos.map(g=>`<option value="${g}">${g}</option>`).join('');
+  filtrarPremissas();
+}
+
+function filtrarPremissas(){
+  const q=document.getElementById('filtro-prem').value.toLowerCase();
+  const grp=document.getElementById('filtro-grupo').value;
+  const status=document.getElementById('filtro-status').value;
+  // also add unmapped ones from despesas
+  const premMap=new Set(config.premissas.map(p=>p.apelido.toUpperCase()));
+  const unmapped=[...new Set(state.despesas.map(d=>d.apelido))].filter(a=>!premMap.has(a));
+  let lista=config.premissas.filter(p=>{
+    if(q&&!p.apelido.toLowerCase().includes(q)&&!p.criterio.toLowerCase().includes(q))return false;
+    if(grp&&p.grupo!==grp)return false;
+    if(status==='incluir'&&p._ignorar)return false;
+    if(status==='ignorar'&&!p._ignorar)return false;
+    if(status==='naomapeado')return false;
+    return true;
+  });
+  const criterios=[...CRITERIOS_FIXOS,...config.gerentes];
+  let html=lista.map(p=>{
+    const realIdx=config.premissas.indexOf(p);
+    const opts=criterios.map(c=>`<option value="${c}"${c===p.criterio?' selected':''}>${c}</option>`).join('');
+    return`<tr id="prow-${realIdx}"${p._ignorar?' style="opacity:.5"':''}>
+      <td>${p.apelido}${p._modified?'<span class="tag-mod">editado</span>':''}</td>
+      <td style="color:var(--text2);font-size:12px">${p.grupo}</td>
+      <td><select class="prem-select"${p._ignorar?' disabled':''} onchange="alterarCriterio(${realIdx},this.value)">${opts}</select></td>
+      <td><button class="toggle-btn ${p._ignorar?'ignored':'active'}" onclick="toggleIgnorar(${realIdx})">${p._ignorar?'Ignorar':'Incluir'}</button></td>
+      <td>${p._modified?`<button onclick="resetCriterio(${realIdx})" style="font-size:12px;padding:4px 8px;color:var(--text2)">↺</button>`:''}</td>
+    </tr>`;
+  }).join('');
+  if(status===''||status==='naomapeado'){
+    unmapped.filter(a=>!q||a.toLowerCase().includes(q)).forEach(a=>{
+      html+=`<tr style="background:color-mix(in srgb,var(--amber-bg) 40%,transparent)">
+        <td>${a} <span class="badge badge-warn">não mapeado</span></td>
+        <td colspan="4" style="color:var(--text2);font-size:12px">Adicione ao premissas.json para mapear esta conta</td>
+      </tr>`;
+    });
+  }
+  document.getElementById('prem-body').innerHTML=html;
+}
+
+function toggleIgnorar(idx){
+  config.premissas[idx]._ignorar=!config.premissas[idx]._ignorar;
+  filtrarPremissas();
+  renderPremissasPreview();
+  updateHeaderMeta();
+}
+function alterarCriterio(idx,v){
+  if(!config.premissas[idx]._original)config.premissas[idx]._original=config.premissas[idx].criterio;
+  config.premissas[idx].criterio=v;
+  config.premissas[idx]._modified=v!==config.premissas[idx]._original;
+  const tr=document.getElementById('prow-'+idx);
+  if(tr){tr.querySelector('td:first-child').innerHTML=config.premissas[idx].apelido+(config.premissas[idx]._modified?'<span class="tag-mod">editado</span>':'');}
+  updateHeaderMeta();
+}
+function resetCriterio(idx){
+  if(config.premissas[idx]._original){config.premissas[idx].criterio=config.premissas[idx]._original;config.premissas[idx]._modified=false;}
+  filtrarPremissas();updateHeaderMeta();
+}
+function resetPremissas(){
+  config.premissas.forEach(p=>{if(p._original){p.criterio=p._original;p._modified=false;}});
+  filtrarPremissas();updateHeaderMeta();
+}
+function updateHeaderMeta(){
+  const nMod=config.premissas.filter(p=>p._modified).length;
+  const nIgn=config.premissas.filter(p=>p._ignorar).length;
+  document.getElementById('header-meta').textContent=`${config.premissas.length} premissas`+(nMod?` · ${nMod} editada(s)`:'')+( nIgn?` · ${nIgn} ignorada(s)`:'');
+}
+
+// ── RECEITAS ──
+function renderReceitaInputs(){
+  const meses=state.meses.length?state.meses:[`${new Date().getFullYear()}-${String(new Date().getMonth()+1).padStart(2,'0')}`];
+  let html='';
+  meses.forEach(mk=>{
+    const [ano,mes]=mk.split('-').map(Number);
+    html+=`<div style="margin-bottom:1.5rem"><div style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--text2)">${MESES_NOMES[mes-1]} ${ano}</div>`;
+    config.veiculos_receita.forEach(v=>{
+      const def=((state.receitas[mes]||{})[ano]||{})[v]||0;
+      const id=`rec_${mes}_${ano}_${v.replace(/\s+/g,'_')}`;
+      html+=`<div class="input-row"><label style="width:180px">${v}</label><input type="number" id="${id}" value="${def.toFixed(2)}" step="0.01"><span style="font-size:12px;color:var(--text2)">R$</span></div>`;
+    });
+    html+='</div>';
+  });
+  document.getElementById('receita-inputs').innerHTML=html;
+}
+
+// ── CALCULAR DRE ──
+function getPeso(criterio,gerente){
+  if(criterio==='Participação Carteira')return state.carteira[gerente]?.carteira||0;
+  if(criterio==='Qtde de Duplicatas')return state.carteira[gerente]?.duplicatas||0;
+  if(criterio==='Especifica Filial'){
+    const fg=state.carteira[gerente]?.filiais||[];
+    const todos=config.gerentes.filter(g=>(state.carteira[g]?.filiais||[]).some(f=>fg.includes(f)));
+    return todos.includes(gerente)?1/Math.max(todos.length,1):0;
+  }
+  return criterio===gerente?1:0;
+}
+
+function calcularDRE(){
+  loading(true);
+  setTimeout(()=>{
+    const meses=state.meses.length?state.meses:[`${new Date().getFullYear()}-01`];
+    // save receitas from inputs
+    meses.forEach(mk=>{
+      const [ano,mes]=mk.split('-').map(Number);
+      if(!state.receitas[mes])state.receitas[mes]={};
+      if(!state.receitas[mes][ano])state.receitas[mes][ano]={};
+      config.veiculos_receita.forEach(v=>{
+        const el=document.getElementById(`rec_${mes}_${ano}_${v.replace(/\s+/g,'_')}`);
+        if(el)state.receitas[mes][ano][v]=parseFloat(el.value)||0;
+      });
+    });
+    const gerentes=config.gerentes;
+    const premMap={};
+    config.premissas.forEach(p=>{premMap[p.apelido.toUpperCase()]=p});
+    // build per-month DRE
+    const dreByMes={};
+    meses.forEach(mk=>{
+      const [ano,mes]=mk.split('-').map(Number);
+      const dre={};
+      gerentes.forEach(g=>{dre[g]={receita:0,despesas:{},total:0}});
+      config.veiculos_receita.forEach(v=>{
+        const total=(state.receitas[mes]||{})[ano]?.[v]||0;
+        gerentes.forEach(g=>{dre[g].receita+=total*(state.carteira[g]?.carteira||0)});
+      });
+      const desp=state.despesas.filter(d=>d.mes===mes&&d.ano===ano);
+      desp.forEach(d=>{
+        const prem=premMap[d.apelido.toUpperCase()];
+        if(prem&&prem._ignorar)return;
+        const criterio=prem?prem.criterio:'Participação Carteira';
+        const pesos={};
+        gerentes.forEach(g=>{pesos[g]=getPeso(criterio,g)});
+        const soma=Object.values(pesos).reduce((a,b)=>a+b,0);
+        gerentes.forEach(g=>{
+          const frac=soma>0?pesos[g]/soma:0;
+          const v=d.valor*frac;
+          if(!dre[g].despesas[d.grupo])dre[g].despesas[d.grupo]={};
+          if(!dre[g].despesas[d.grupo][d.apelido])dre[g].despesas[d.grupo][d.apelido]=0;
+          dre[g].despesas[d.grupo][d.apelido]+=v;
+        });
+      });
+      gerentes.forEach(g=>{
+        let totD=0;Object.values(dre[g].despesas).forEach(gr=>Object.values(gr).forEach(v=>totD+=v));
+        dre[g].total=dre[g].receita+totD;
+      });
+      dreByMes[mk]=dre;
+    });
+    state.dre=dreByMes;
+    // build audit rows (all months)
+    const auditRows=[];
+    state.despesas.forEach(d=>{
+      const prem=premMap[d.apelido.toUpperCase()];
+      const ignored=prem?prem._ignorar:false;
+      const unmapped=!prem;
+      const criterio=prem?prem.criterio:'Participação Carteira';
+      const pesos={};gerentes.forEach(g=>{pesos[g]=getPeso(criterio,g)});
+      const soma=Object.values(pesos).reduce((a,b)=>a+b,0);
+      const row={apelido:d.apelido,grupo:d.grupo,criterio,total:d.valor,mes:d.mes,ano:d.ano,_ignored:ignored,_unmapped:unmapped};
+      gerentes.forEach(g=>{
+        const frac=(!ignored&&soma>0)?pesos[g]/soma:0;
+        row[g]=d.valor*frac;
+      });
+      auditRows.push(row);
+    });
+    state.auditRows=auditRows;
+    state.ready=4;
+    rodarChecks();
+    renderDRE();
+    renderAudit();
+    renderDashVeiculos();
+    loading(false);
+    goStep(3);
+  },50);
+}
+
+// ── CHECKS ──
+function rodarChecks(){
+  const gerentes=config.gerentes;
+  const checks=[];
+  const errosRateio=state.auditRows.filter(r=>{
+    if(r._ignored)return false;
+    const soma=gerentes.reduce((a,g)=>a+(r[g]||0),0);
+    return Math.abs(soma-r.total)>TOLERANCE;
+  });
+  checks.push({titulo:'Rateio fecha por lançamento',descricao:'Soma dos gerentes = valor original',ok:errosRateio.length===0,erros:errosRateio.slice(0,3).map(r=>`${r.apelido}`)});
+  const unmapped=state.auditRows.filter(r=>r._unmapped&&!r._ignored);
+  checks.push({titulo:'Contas não mapeadas',descricao:'Apelidos sem premissa configurada',ok:unmapped.length===0,erros:[...new Set(unmapped.map(r=>r.apelido))].slice(0,5)});
+  const somaCart=gerentes.reduce((a,g)=>a+(state.carteira[g]?.carteira||0),0);
+  const diffCart=Math.abs(somaCart-1);
+  checks.push({titulo:'Participações de carteira',descricao:'Soma dos % de carteira = 100%',ok:diffCart<0.005,erros:diffCart>=0.005?[`Soma: ${(somaCart*100).toFixed(1)}% (esperado 100%)`]:[]});
+  state.checks=checks;
+  const panel=document.getElementById('check-panel');
+  panel.innerHTML=checks.map(c=>{
+    const cl=c.ok?'ok':c.erros.length<=2?'warn':'err';
+    const icon=c.ok?'✅':cl==='warn'?'⚠️':'❌';
+    return`<div class="check-card ${cl}"><div class="check-header"><span>${icon}</span><span class="check-title">${c.titulo}</span></div>
+    <div class="check-detail" style="margin-bottom:6px">${c.descricao}</div>
+    <div class="check-detail">${c.ok?'<span class="ok-line">Tudo confere</span>':c.erros.map(e=>`<div class="err-line">· ${e}</div>`).join('')}</div></div>`;
+  }).join('');
+}
+
+// ── RENDER DRE ──
+function renderDRE(){
+  const meses=state.meses;
+  const gerentes=config.gerentes;
+  // month filter chips
+  const mf=document.getElementById('month-filter');
+  mf.innerHTML=`<span class="month-chip${state.mesAtivo==='todos'?' active':''}" onclick="setMesAtivo('todos')">Acumulado</span>`+
+    meses.map(mk=>{const[ano,mes]=mk.split('-').map(Number);return`<span class="month-chip${state.mesAtivo===mk?' active':''}" onclick="setMesAtivo('${mk}')">${MESES_NOMES[mes-1]}/${String(ano).slice(-2)}</span>`}).join('');
+  // tabs
+  const tabBar=document.getElementById('tabs');
+  const tabs=['Consolidado',...gerentes];
+  tabBar.innerHTML=tabs.map((t,i)=>`<div class="tab${i===0?' active':''}" onclick="showTab(${i},'${t}')">${t}</div>`).join('');
+  // metrics
+  const dre=getDREAtivo();
+  const totRec=gerentes.reduce((a,g)=>a+dre[g].receita,0);
+  const totDesp=gerentes.reduce((a,g)=>{let s=0;Object.values(dre[g].despesas).forEach(gr=>Object.values(gr).forEach(v=>s+=v));return a+s},0);
+  const totRes=gerentes.reduce((a,g)=>a+dre[g].total,0);
+  document.getElementById('metricas').innerHTML=`
+    <div class="metric"><div class="metric-label">Receita bruta</div><div class="metric-val pos">${fmt(totRec)}</div></div>
+    <div class="metric"><div class="metric-label">Despesas totais</div><div class="metric-val neg">${fmt(totDesp)}</div></div>
+    <div class="metric"><div class="metric-label">Resultado</div><div class="metric-val ${cls(totRes)}">${fmt(totRes)}</div></div>
+    <div class="metric"><div class="metric-label">Meses</div><div class="metric-val">${meses.length}</div></div>`;
+  showTab(0,'Consolidado');
+}
+
+function getDREAtivo(){
+  const gerentes=config.gerentes;
+  if(state.mesAtivo==='todos'){
+    // merge all months
+    const merged={};
+    gerentes.forEach(g=>{merged[g]={receita:0,despesas:{},total:0}});
+    Object.values(state.dre).forEach(mDre=>{
+      gerentes.forEach(g=>{
+        merged[g].receita+=mDre[g].receita;
+        Object.entries(mDre[g].despesas).forEach(([grp,aps])=>{
+          if(!merged[g].despesas[grp])merged[g].despesas[grp]={};
+          Object.entries(aps).forEach(([ap,v])=>{merged[g].despesas[grp][ap]=(merged[g].despesas[grp][ap]||0)+v});
+        });
+        merged[g].total+=mDre[g].total;
+      });
+    });
+    return merged;
+  }
+  return state.dre[state.mesAtivo]||{};
+}
+
+function setMesAtivo(mk){
+  state.mesAtivo=mk;
+  renderDRE();
+}
+
+function showTab(idx,name){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.className='tab'+(i===idx?' active':''));
+  const dre=getDREAtivo();
+  const gerentes=config.gerentes;
+  const cont=document.getElementById('dre-content');
+  let html=`<div class="tbl-wrap"><table>`;
+
+  if(name==='Consolidado'){
+    // build column headers with months
+    const showMeses=state.mesAtivo==='todos'&&state.meses.length>1;
+    html+=`<thead><tr><th style="min-width:200px">Linha</th>`;
+    if(showMeses){
+      html+=`<th class="num">Acumulado</th>`;
+      state.meses.forEach(mk=>{const[ano,mes]=mk.split('-').map(Number);html+=`<th class="num">${MESES_NOMES[mes-1]}/${String(ano).slice(-2)}</th>`});
+    } else {
+      gerentes.forEach(g=>html+=`<th class="num">${g}</th>`);
+      html+=`<th class="num">Total</th>`;
+    }
+    html+=`</tr></thead><tbody>`;
+
+    const getVal=(tipo,key,mes)=>{
+      if(tipo==='receita'){
+        if(mes){
+          const[ano,m]=mes.split('-').map(Number);
+          return gerentes.reduce((a,g)=>a+((state.receitas[m]||{})[ano]?.[key]||0)*(state.carteira[g]?.carteira||0),0);
+        }
+        return gerentes.reduce((a,g)=>a+dre[g].receita,0);
+      }
+      if(tipo==='grupo'){
+        const dreM=mes?state.dre[mes]:dre;
+        if(!dreM)return 0;
+        return gerentes.reduce((a,g)=>{
+          const grpData=dreM[g]?.despesas[key]||{};
+          return a+Object.values(grpData).reduce((s,v)=>s+v,0);
+        },0);
+      }
+      return 0;
+    };
+
+    let grpIdx=0;
+    DRE_ESTRUTURA.forEach(item=>{
+      if(item.tipo==='secao'){
+        html+=`<tr class="row-section"><td colspan="20">${item.label}</td></tr>`;
+      } else if(item.tipo==='receita'){
+        if(showMeses){
+          const acum=state.meses.reduce((a,mk)=>{
+            const[ano,m]=mk.split('-').map(Number);
+            return a+gerentes.reduce((s,g)=>s+((state.receitas[m]||{})[ano]?.[item.veiculo]||0)*(state.carteira[g]?.carteira||0),0);
+          },0);
+          html+=`<tr><td style="padding-left:1rem">${item.label}</td><td class="num ${cls(acum)}">${fmtN(acum)}</td>`;
+          state.meses.forEach(mk=>{const v=getVal('receita',item.veiculo,mk);html+=`<td class="num ${cls(v)}">${fmtN(v)}</td>`});
+          html+=`</tr>`;
+        } else {
+          html+=`<tr><td style="padding-left:1rem">${item.label}</td>`;
+          let tot=0;
+          gerentes.forEach(g=>{
+            const v=dre[g]?.receita||0;
+            html+=`<td class="num ${cls(v)}">${fmtN(v)}</td>`;tot+=v;
+          });
+          html+=`<td class="num ${cls(tot)}">${fmtN(tot)}</td></tr>`;
+        }
+      } else if(item.tipo==='grupo'){
+        const gid='cg'+(grpIdx++);
+        if(showMeses){
+          const acum=state.meses.reduce((a,mk)=>a+getVal('grupo',item.grupo,mk),0);
+          html+=`<tr class="row-group" onclick="toggleGrupo('${gid}')" id="${gid}-hdr"><td>${item.label}</td><td class="num neg">${fmtN(acum)}</td>`;
+          state.meses.forEach(mk=>{const v=getVal('grupo',item.grupo,mk);html+=`<td class="num neg">${fmtN(v)}</td>`});
+          html+=`</tr>`;
+          // sub-rows
+          const apsByLabel={};
+          state.despesas.filter(d=>d.grupo===item.grupo).forEach(d=>{
+            const prem=config.premissas.find(p=>p.apelido.toUpperCase()===d.apelido.toUpperCase());
+            if(prem&&prem._ignorar)return;
+            if(!apsByLabel[d.apelido])apsByLabel[d.apelido]={};
+            const mk=`${d.ano}-${String(d.mes).padStart(2,'0')}`;
+            apsByLabel[d.apelido][mk]=(apsByLabel[d.apelido][mk]||0)+d.valor;
+          });
+          // actually use rateado values from dre
+          const apsRateado={};
+          Object.values(state.dre).forEach((mDre,mi)=>{
+            const mk=state.meses[mi];
+            gerentes.forEach(g=>{
+              const grpData=mDre[g]?.despesas[item.grupo]||{};
+              Object.entries(grpData).forEach(([ap,v])=>{
+                if(!apsRateado[ap])apsRateado[ap]={};
+                apsRateado[ap][mk]=(apsRateado[ap][mk]||0)+v;
+              });
+            });
+          });
+          Object.entries(apsRateado).forEach(([ap,byMes])=>{
+            const apAcum=Object.values(byMes).reduce((a,v)=>a+v,0);
+            html+=`<tr class="row-sub" data-group="${gid}"><td>${ap}</td><td class="num neg">${fmtN(apAcum)}</td>`;
+            state.meses.forEach(mk=>{html+=`<td class="num" style="color:var(--text2)">${fmtN(byMes[mk]||0)}</td>`});
+            html+=`</tr>`;
+          });
+        } else {
+          const totGrp={};gerentes.forEach(g=>totGrp[g]=0);
+          Object.values(dre[gerentes[0]]?.despesas[item.grupo]||{}).forEach(()=>{});
+          gerentes.forEach(g=>{Object.values(dre[g]?.despesas[item.grupo]||{}).forEach(v=>totGrp[g]+=v)});
+          let tt=0;
+          html+=`<tr class="row-group" onclick="toggleGrupo('${gid}')" id="${gid}-hdr"><td>${item.label}</td>`;
+          gerentes.forEach(g=>{html+=`<td class="num neg">${fmtN(totGrp[g])}</td>`;tt+=totGrp[g]});
+          html+=`<td class="num neg">${fmtN(tt)}</td></tr>`;
+          // sub rows
+          const aps={};
+          gerentes.forEach(g=>Object.entries(dre[g]?.despesas[item.grupo]||{}).forEach(([ap,v])=>{
+            if(!aps[ap])aps[ap]={};aps[ap][g]=(aps[ap][g]||0)+v;
+          }));
+          Object.entries(aps).forEach(([ap,byG])=>{
+            let sub=0;
+            html+=`<tr class="row-sub" data-group="${gid}"><td>${ap}</td>`;
+            gerentes.forEach(g=>{html+=`<td class="num">${fmtN(byG[g]||0)}</td>`;sub+=byG[g]||0});
+            html+=`<td class="num">${fmtN(sub)}</td></tr>`;
+          });
+        }
+      } else if(item.tipo==='total'){
+        if(showMeses){
+          const totAcum=gerentes.reduce((a,g)=>a+Object.values(state.dre).reduce((s,m)=>s+(m[g]?.total||0),0)+Object.values(state.dre).reduce((s,m)=>s+(m[g]?.receita||0),0)*(0),0);
+          // compute properly
+          const totByMes={};
+          state.meses.forEach(mk=>{
+            const mDre=state.dre[mk]||{};
+            totByMes[mk]=gerentes.reduce((a,g)=>a+(mDre[g]?.total||0),0);
+          });
+          const totAc=Object.values(totByMes).reduce((a,v)=>a+v,0);
+          html+=`<tr class="row-total"><td>Resultado</td><td class="num ${cls(totAc)}">${fmtN(totAc)}</td>`;
+          state.meses.forEach(mk=>{html+=`<td class="num ${cls(totByMes[mk]||0)}">${fmtN(totByMes[mk]||0)}</td>`});
+          html+=`</tr>`;
+        } else {
+          let totR=0;
+          html+=`<tr class="row-total"><td>Resultado</td>`;
+          gerentes.forEach(g=>{html+=`<td class="num ${cls(dre[g]?.total||0)}">${fmtN(dre[g]?.total||0)}</td>`;totR+=dre[g]?.total||0});
+          html+=`<td class="num ${cls(totR)}">${fmtN(totR)}</td></tr>`;
+        }
+      }
+    });
+    html+=`</tbody></table></div>`;
+  } else {
+    // individual gerente tab
+    const g=name;
+    let grpIdx=0;
+    html+=`<thead><tr><th>Linha</th><th class="num">Valor</th></tr></thead><tbody>`;
+    DRE_ESTRUTURA.forEach(item=>{
+      if(item.tipo==='secao'){
+        html+=`<tr class="row-section"><td colspan="2">${item.label}</td></tr>`;
+      } else if(item.tipo==='receita'){
+        const v=dre[g]?.receita||0;
+        html+=`<tr><td style="padding-left:1rem">${item.label}</td><td class="num ${cls(v)}">${fmt(v)}</td></tr>`;
+      } else if(item.tipo==='grupo'){
+        const gid='gg'+(grpIdx++);
+        let tot=0;Object.values(dre[g]?.despesas[item.grupo]||{}).forEach(v=>tot+=v);
+        html+=`<tr class="row-group" onclick="toggleGrupo('${gid}')" id="${gid}-hdr"><td>${item.label}</td><td class="num neg">${fmt(tot)}</td></tr>`;
+        Object.entries(dre[g]?.despesas[item.grupo]||{}).forEach(([ap,v])=>{
+          html+=`<tr class="row-sub" data-group="${gid}"><td>${ap}</td><td class="num neg">${fmt(v)}</td></tr>`;
+        });
+      } else if(item.tipo==='total'){
+        html+=`<tr class="row-total"><td>Resultado</td><td class="num ${cls(dre[g]?.total||0)}">${fmt(dre[g]?.total||0)}</td></tr>`;
+      }
+    });
+    html+=`</tbody></table></div>`;
+  }
+  cont.innerHTML=html;
+}
+
+function toggleGrupo(gid){
+  const hdr=document.getElementById(gid+'-hdr');
+  const subs=document.querySelectorAll(`[data-group="${gid}"]`);
+  const isOpen=hdr.classList.contains('open');
+  hdr.classList.toggle('open',!isOpen);
+  subs.forEach(r=>r.classList.toggle('visible',!isOpen));
+}
+
+// ── DASHBOARD ──
+function renderDashVeiculos(){
+  const rows=state.carteiraRows||[];
+  if(!rows.length){document.getElementById('dash-veiculos').innerHTML='<p style="font-size:13px;color:var(--text2)">Nenhum dado de carteira com veículo disponível.</p>';return;}
+  const byG={};
+  rows.forEach(r=>{if(!byG[r.gerente])byG[r.gerente]={};byG[r.gerente][r.empresa]=(byG[r.gerente][r.empresa]||0)+r.total});
+  const maxTotal=Math.max(...config.gerentes.filter(g=>byG[g]).map(g=>Object.values(byG[g]).reduce((a,b)=>a+b,0)),1);
+  document.getElementById('dash-veiculos').innerHTML=`<div class="dash-grid">${config.gerentes.filter(g=>byG[g]).map(g=>{
+    const total=Object.values(byG[g]).reduce((a,b)=>a+b,0);
+    const pct=(total/maxTotal*100).toFixed(1);
+    return`<div class="dash-card"><div class="dash-card-header">${g}</div><div class="dash-card-total">${fmt(total)}</div>
+    <div class="dash-bar"><div class="dash-bar-fill" style="width:${pct}%"></div></div>
+    ${Object.entries(byG[g]).sort((a,b)=>b[1]-a[1]).map(([v,val])=>`<div class="dash-card-row"><span class="vname">${v}</span><span class="vval">${fmt(val)}</span></div>`).join('')}</div>`;
+  }).join('')}</div>`;
+}
+
+// ── AUDITORIA ──
+function renderAudit(){
+  const gerentes=config.gerentes;
+  const unmapped=[...new Set(state.auditRows.filter(r=>r._unmapped&&!r._ignored).map(r=>r.apelido))];
+  const alertEl=document.getElementById('unmapped-alert');
+  alertEl.innerHTML=unmapped.length?`<div class="notice warn" style="margin-bottom:1rem">🔶 ${unmapped.length} conta(s) não mapeada(s) nas premissas: ${unmapped.join(', ')}</div>`:'';
+  const body=document.getElementById('audit-body');
+  body.innerHTML=state.auditRows.map(r=>{
+    const somaGer=gerentes.reduce((a,g)=>a+(r[g]||0),0);
+    const diff=Math.abs(somaGer-r.total);
+    const hasErr=!r._ignored&&diff>TOLERANCE;
+    const badgeCls=r.criterio==='Participação Carteira'?'badge-cart':r.criterio==='Qtde de Duplicatas'?'badge-dup':r.criterio==='Especifica Filial'?'badge-fil':'badge-ger';
+    const rowCls=r._ignored?'row-ignored':r._unmapped?'row-unmapped':hasErr?'row-err':'';
+    const status=r._ignored?'<span class="badge" style="background:var(--bg3);color:var(--text2)">—</span>':r._unmapped?'<span class="badge badge-warn">🔶</span>':hasErr?'<span class="badge badge-err">⚠️</span>':'<span class="badge badge-ok">✓</span>';
+    return`<tr class="${rowCls}" data-status="${r._ignored?'ignored':r._unmapped?'unmapped':hasErr?'err':'ok'}">
+      <td>${status}</td><td>${r.apelido}</td><td>${r.grupo}</td>
+      <td><span class="badge ${badgeCls}">${r.criterio}</span></td>
+      <td class="num ${cls(r.total)}">${fmtN(r.total)}</td>
+      <td class="num">${r._ignored?'—':fmtN(somaGer)}</td>
+      <td class="num ${hasErr?'neg':''}">${hasErr?fmtN(somaGer-r.total):'—'}</td>
+      ${gerentes.map(g=>`<td class="num ${cls(r[g]||0)}">${fmtN(r[g]||0)}</td>`).join('')}
+    </tr>`;
+  }).join('');
+}
+
+function filtrar(){
+  const q=document.getElementById('filtro').value.toLowerCase();
+  const st=document.getElementById('audit-filter-status').value;
+  document.querySelectorAll('#audit-body tr').forEach(tr=>{
+    const matchQ=!q||tr.textContent.toLowerCase().includes(q);
+    const matchS=!st||tr.dataset.status===st;
+    tr.style.display=matchQ&&matchS?'':'none';
+  });
+}
+
+function exportCSV(){
+  if(!state.auditRows.length)return;
+  const gerentes=config.gerentes;
+  let csv='Mês,Ano,Apelido,Grupo,Critério,Status,Total,'+gerentes.join(',')+'\n';
+  state.auditRows.forEach(r=>{
+    const st=r._ignored?'Ignorado':r._unmapped?'Não mapeado':'Incluído';
+    csv+=`${r.mes||''},${r.ano||''},"${r.apelido}","${r.grupo}","${r.criterio}","${st}",${r.total.toFixed(2)},${gerentes.map(g=>(r[g]||0).toFixed(2)).join(',')}\n`;
+  });
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download='dre_gerencial_auditoria.csv';
+  a.click();
+}
+
+
+function showAddPremissa(){document.getElementById('modal-add').classList.remove('hidden')}
+function closeAddModal(){document.getElementById('modal-add').classList.add('hidden')}
+function salvarNovaPremissa(){
+  const apelido=document.getElementById('new-apelido').value.trim().toUpperCase();
+  if(!apelido){alert('Informe o apelido');return;}
+  const grupo=document.getElementById('new-grupo').value;
+  const criterio=document.getElementById('new-criterio').value;
+  const ignorar=document.getElementById('new-ignorar').value==='true';
+  // check duplicate
+  const exists=config.premissas.find(p=>p.apelido.toUpperCase()===apelido);
+  if(exists){alert('Esta conta já existe nas premissas.');return;}
+  config.premissas.push({apelido,grupo,criterio,_ignorar:ignorar,_new:true});
+  closeAddModal();
+  document.getElementById('new-apelido').value='';
+  filtrarPremissas();
+  renderPremissasPreview();
+  updateHeaderMeta();
+}
+
+setupUploads();
+init();
+</script>
+
+  <!-- MODAL NOVA PREMISSA -->
+  <div id="modal-add" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center">
+    <div style="background:var(--bg);border-radius:var(--rl);padding:2rem;width:420px;max-width:95vw">
+      <div style="font-size:15px;font-weight:500;margin-bottom:1.25rem">Nova conta nas premissas</div>
+      <div class="input-row"><label>Apelido (exato)</label><input type="text" id="new-apelido" placeholder="ex: NOVA DESPESA" style="flex:1"></div>
+      <div class="input-row"><label>Grupo</label>
+        <select id="new-grupo" style="flex:1;font-size:13px;padding:8px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text)">
+          <option>ADM - CREDITO</option><option>ADM - INFORMATICA</option><option>ADM - INSTALACOES</option>
+          <option>ADM - JURIDICO/ADV</option><option>ADM - MAT EXPEDIENTE</option><option>ADM - VIAGEM REPRES</option>
+          <option>ADM-SERV. TERCEIROS</option><option>PROLABORE</option><option>DIRETORIA - SÓCIOS</option>
+          <option>PESSOAL - COMERCIAL</option><option>PESSOAL - CONTAB/ADM</option><option>IMPOSTOS E TRIBUTOS</option>
+          <option>BANCARIA - TARIFAS</option><option>DESPESAS C/ FUNDOS</option><option>DESPESAS SÃO PAULO</option>
+          <option>COMISSÕES - REBATES</option><option>IMOBILIZADO NOVO</option>
+        </select>
+      </div>
+      <div class="input-row"><label>Critério</label>
+        <select id="new-criterio" style="flex:1;font-size:13px;padding:8px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text)">
+          <option>Participação Carteira</option><option>Qtde de Duplicatas</option><option>Especifica Filial</option>
+          <option>Sobrinho</option><option>Lucimar</option><option>Cabral</option><option>Rhavi</option><option>Christiano</option><option>Diretoria</option>
+        </select>
+      </div>
+      <div class="input-row"><label>Incluir no DRE</label>
+        <select id="new-ignorar" style="flex:1;font-size:13px;padding:8px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text)">
+          <option value="false">Incluir</option><option value="true">Ignorar</option>
+        </select>
+      </div>
+      <div class="btn-row">
+        <button onclick="closeAddModal()">Cancelar</button>
+        <button class="primary" onclick="salvarNovaPremissa()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
