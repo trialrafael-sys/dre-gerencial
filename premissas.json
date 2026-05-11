@@ -1,0 +1,882 @@
+{
+  "_instrucoes": "Critérios: 'Participação Carteira', 'Qtde de Duplicatas', 'Especifica Filial', ou nome do gerente. Use 'ignorar': true para excluir do DRE.",
+  "gerentes": [
+    "Sobrinho",
+    "Lucimar",
+    "Cabral",
+    "Rhavi",
+    "Christiano",
+    "Diretoria"
+  ],
+  "veiculos_receita": [
+    "FIDC SETTORE",
+    "FIDC MULTI",
+    "GRAFO",
+    "Consultora"
+  ],
+  "filiais": {
+    "RJ": [
+      "Sobrinho",
+      "Diretoria"
+    ],
+    "SP": [
+      "Lucimar",
+      "Cabral",
+      "Rhavi",
+      "Christiano"
+    ]
+  },
+  "premissas": [
+    {
+      "apelido": "ANFAC BACEN",
+      "grupo": "ADM - CREDITO",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "BEECRED TECNOLOGIA",
+      "grupo": "ADM - CREDITO",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "CREDITHUB",
+      "grupo": "ADM - CREDITO",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "GRAFENO ANALYTICS",
+      "grupo": "ADM - CREDITO",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "RISK3 TEC. ANALISE",
+      "grupo": "ADM - CREDITO",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "CORREIOS TELEGRAMAS",
+      "grupo": "ADM - CREDITO",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "FINANBLUE",
+      "grupo": "ADM - CREDITO",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "SERASA VOLUMETRIA",
+      "grupo": "ADM - CREDITO",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "CRDC ASSINATURA",
+      "grupo": "ADM - CREDITO",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "LICENÇAS RJ",
+      "grupo": "ADM - INFORMATICA",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "LINK DEDICADO - RJ",
+      "grupo": "ADM - INFORMATICA",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "LINK DEDICADO - SP",
+      "grupo": "ADM - INFORMATICA",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "PGTO RHAVI PINTA",
+      "grupo": "ADM - INFORMATICA",
+      "criterio": "Rhavi"
+    },
+    {
+      "apelido": "SERVICOS TI - RJ",
+      "grupo": "ADM - INFORMATICA",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "SOFTWARE - RJ",
+      "grupo": "ADM - INFORMATICA",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "ALUGUEL - SP",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "ALUGUEL RICARDO",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "CONDOMINIO",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "CONDOMINIO - SP",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "IPTU - RJ",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "IPTU - SP",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "ENERGIA ELETRICA-SP",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "ENERGIA ELETRICA-RJ",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "TAXA DE INCENDIO-SP",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "TAXA DE INCENDIO-RJ",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "SEGUROS - RJ",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "TELEFONE - RJ",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "TELEFONE - SP",
+      "grupo": "ADM - INSTALACOES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "CUSTAS PROCESSUAIS",
+      "grupo": "ADM - JURIDICO/ADV",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "HON. ADVOCATICIOS",
+      "grupo": "ADM - JURIDICO/ADV",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "REEMB. CUSTAS ADV",
+      "grupo": "ADM - JURIDICO/ADV",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "SENTENCA JUDICIAL",
+      "grupo": "ADM - JURIDICO/ADV",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "LIVROS CONTABEIS",
+      "grupo": "ADM - MAT EXPEDIENTE",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "MATERIAL CONSUMO-SP",
+      "grupo": "ADM - MAT EXPEDIENTE",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "MATERIAL DE LIMPEZA",
+      "grupo": "ADM - MAT EXPEDIENTE",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "MATERIAL DE CONSUMO",
+      "grupo": "ADM - MAT EXPEDIENTE",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "MATERIAL ESCRITORIO",
+      "grupo": "ADM - MAT EXPEDIENTE",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "ESTORNO COMPRAS",
+      "grupo": "ADM - MAT EXPEDIENTE",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "HOSPEDAGEM - LUCIMAR",
+      "grupo": "ADM - VIAGEM REPRES",
+      "criterio": "Lucimar"
+    },
+    {
+      "apelido": "HOSPEDAGEM - MARIANA",
+      "grupo": "ADM - VIAGEM REPRES",
+      "criterio": "Lucimar"
+    },
+    {
+      "apelido": "PASSAG AEREA-CABRAL",
+      "grupo": "ADM - VIAGEM REPRES",
+      "criterio": "Cabral"
+    },
+    {
+      "apelido": "PASSAG.AEREA-LUCIMAR",
+      "grupo": "ADM - VIAGEM REPRES",
+      "criterio": "Lucimar"
+    },
+    {
+      "apelido": "ASSOCIAÇÕES",
+      "grupo": "ADM-SERV. TERCEIROS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "CORREIOS ADM",
+      "grupo": "ADM-SERV. TERCEIROS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "CARTÓRIO - RJ",
+      "grupo": "ADM-SERV. TERCEIROS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "DIARISTA - RJ",
+      "grupo": "ADM-SERV. TERCEIROS",
+      "criterio": "Especifica Filial"
+    },
+    {
+      "apelido": "DIARISTA - SP",
+      "grupo": "ADM-SERV. TERCEIROS",
+      "criterio": "Especifica Filial"
+    },
+    {
+      "apelido": "CERTIFICADO DIGITAL",
+      "grupo": "ADM-SERV. TERCEIROS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "ESCRITURAÇÃO FISCAL",
+      "grupo": "ADM-SERV. TERCEIROS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "TAXA JUCERJA-RJ",
+      "grupo": "ADM-SERV. TERCEIROS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "OUTROS PREST. PJ",
+      "grupo": "ADM-SERV. TERCEIROS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "PREST. SERV. PJ - SP",
+      "grupo": "ADM-SERV. TERCEIROS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "PLANO DE SAUDE",
+      "grupo": "ADM-SERV. TERCEIROS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "PROLABORE",
+      "grupo": "PROLABORE",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - LUCAS",
+      "grupo": "DIRETORIA - SÓCIOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - LUCAS",
+      "grupo": "DIRETORIA - SÓCIOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - RICARDO",
+      "grupo": "DIRETORIA - SÓCIOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO -RAFAEL MAGGION",
+      "grupo": "DIRETORIA - SÓCIOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "REEMBOLSO - LUCAS",
+      "grupo": "DIRETORIA - SÓCIOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "REEMBOLSO - RICARDO",
+      "grupo": "DIRETORIA - SÓCIOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO-CHRISTIANO",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Christiano"
+    },
+    {
+      "apelido": "BENEFICIO - CABRAL",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Cabral"
+    },
+    {
+      "apelido": "BENEFICIO - KAREN",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - LUCELIA",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - LUCIMAR",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Lucimar"
+    },
+    {
+      "apelido": "BENEFICIO - RHAVI",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Rhavi"
+    },
+    {
+      "apelido": "BENEFICIO -SOBRINHO",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Sobrinho"
+    },
+    {
+      "apelido": "COMISSÃO - CABRAL",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Cabral"
+    },
+    {
+      "apelido": "COMISSÃO - KAREN",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - LUCELIA",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - LUCIMAR",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Lucimar"
+    },
+    {
+      "apelido": "COMISSÃO - RHAVI",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Rhavi"
+    },
+    {
+      "apelido": "COMISSÃO - SOBRINHO",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Sobrinho"
+    },
+    {
+      "apelido": "COMISSÃO -CHRISTIANO",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Christiano"
+    },
+    {
+      "apelido": "FIXO - CABRAL",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Cabral"
+    },
+    {
+      "apelido": "FIXO - CHRISTIANO",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Christiano"
+    },
+    {
+      "apelido": "FIXO - KAREN DANTAS",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - LUCELIA",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - LUCIMAR",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Lucimar"
+    },
+    {
+      "apelido": "FIXO - RHAVI PINTA",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Rhavi"
+    },
+    {
+      "apelido": "FIXO - SOBRINHO",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Sobrinho"
+    },
+    {
+      "apelido": "REEMBOLSO - CABRAL",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Cabral"
+    },
+    {
+      "apelido": "REEMBOLSO-CHRISTIANO",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Christiano"
+    },
+    {
+      "apelido": "REEMBOLSO - LUCIMAR",
+      "grupo": "PESSOAL - COMERCIAL",
+      "criterio": "Lucimar"
+    },
+    {
+      "apelido": "BENEFICIO  - CARLOS",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - ROBERTO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - CARLOS",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "DESP. EXTRAS CONTAB",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - CARLOS AFONSO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - ROBERTO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "REEMBOLSO - CARLOS",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "REEMBOLSO - ROBERTO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "REEMBOLSO CONTABIL",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO-LUIS ANTON",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - ISIS",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - ISIS",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO -LUIS ANTON",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - ISIS JENIFER",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - LUIS ANTONIO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "REEMB - L. ANTONIO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - ALEX",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - LUIZA",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - MARIANA",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Lucimar"
+    },
+    {
+      "apelido": "COMISSÃO  - ALEX",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - LUIZA",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - ALEX",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - LUIZA",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - MARIANA",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Lucimar"
+    },
+    {
+      "apelido": "REEMBOLSO - ALEX",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "REEMBOLSO - MARIANA",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Lucimar"
+    },
+    {
+      "apelido": "BENEFICIO - ADRIANA",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - CHICO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - FLAVIO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - LEONARDO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - ADRIANA",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - LEONARDO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - CHICO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - FLAVIO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - CHICO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - ADRIANA",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - FLAVIO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - LEONARDO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIOS - CELSO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - CLAUDIO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "BENEFICIO - DELARUE",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - CELSO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - DELARUE",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - CLAUDIO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - CELSO",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "FIXO - DELARUE",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "REEMBOLSO - DELARUE",
+      "grupo": "PESSOAL - CONTAB/ADM",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - ALFREDO",
+      "grupo": "COMISSÕES - REBATES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - ANTECIPA",
+      "grupo": "COMISSÕES - REBATES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - FELIPE",
+      "grupo": "COMISSÕES - REBATES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - FINAXIS",
+      "grupo": "COMISSÕES - REBATES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - LIMINE",
+      "grupo": "COMISSÕES - REBATES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "PROGREDIR - IDTRUST",
+      "grupo": "COMISSÕES - REBATES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "COMISSÃO - MENESTYS",
+      "grupo": "COMISSÕES - REBATES",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "ANUIDADE CARTÃO CRED",
+      "grupo": "BANCARIA - TARIFAS",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "ESTORNO TR INDEVIDA",
+      "grupo": "BANCARIA - TARIFAS",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "JUROS ATRASO PGTO",
+      "grupo": "BANCARIA - TARIFAS",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "TR COBRANÇA TITULOS",
+      "grupo": "BANCARIA - TARIFAS",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "TR MANUTENÇÃO C/C",
+      "grupo": "BANCARIA - TARIFAS",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "TR. CARTÓRIO/PROT",
+      "grupo": "BANCARIA - TARIFAS",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "TR RENOV. CADASTRO",
+      "grupo": "BANCARIA - TARIFAS",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "DESPESA DE CARTÓRIO",
+      "grupo": "BANCARIA - TARIFAS",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "TR TED/PIX",
+      "grupo": "BANCARIA - TARIFAS",
+      "criterio": "Qtde de Duplicatas"
+    },
+    {
+      "apelido": "DESP. BANC - CTA GAR",
+      "grupo": "BANCARIA - TARIFAS",
+      "criterio": "Qtde de Duplicatas",
+      "ignorar": true
+    },
+    {
+      "apelido": "JUROS S/ CTA GAR",
+      "grupo": "BANCARIA - TARIFAS",
+      "criterio": "Qtde de Duplicatas",
+      "ignorar": true
+    },
+    {
+      "apelido": "COFINS A PAGAR",
+      "grupo": "IMPOSTOS E TRIBUTOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "CONTRIBUICAO SOCIAL",
+      "grupo": "IMPOSTOS E TRIBUTOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "DARF REINF FONTE",
+      "grupo": "IMPOSTOS E TRIBUTOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "IMPOSTO DE RENDA -PJ",
+      "grupo": "IMPOSTOS E TRIBUTOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "ISS A PAGAR",
+      "grupo": "IMPOSTOS E TRIBUTOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "PARCELAMENTOS RFB",
+      "grupo": "IMPOSTOS E TRIBUTOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "PIS A PAGAR",
+      "grupo": "IMPOSTOS E TRIBUTOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "SIMPLES NACIONAL",
+      "grupo": "IMPOSTOS E TRIBUTOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "REEMB. PL. SAUDE",
+      "grupo": "IMPOSTOS E TRIBUTOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "DESP. ADM SP",
+      "grupo": "DESPESAS SÃO PAULO",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "DESP. EXTRA FIC FIDC",
+      "grupo": "DESPESAS C/ FUNDOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "DESP. EXTRAS FIDC II",
+      "grupo": "DESPESAS C/ FUNDOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "DESP. FIDC LAVORO II",
+      "grupo": "DESPESAS C/ FUNDOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "DESP. FIDC SETTORE",
+      "grupo": "DESPESAS C/ FUNDOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "DESPESA - FIC FIDC",
+      "grupo": "DESPESAS C/ FUNDOS",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "MAQ. E EQUIPAMENTOS",
+      "grupo": "IMOBILIZADO NOVO",
+      "criterio": "Participação Carteira"
+    },
+    {
+      "apelido": "IMOB. INVESTIMENTOS",
+      "grupo": "IMOBILIZADO NOVO",
+      "criterio": "Participação Carteira",
+      "ignorar": true
+    },
+    {
+      "apelido": "CONSORCIO- B. BRASIL",
+      "grupo": "IMOBILIZADO NOVO",
+      "criterio": "Participação Carteira",
+      "ignorar": true
+    },
+    {
+      "apelido": "IMPOSTOS DEBÊNTURES",
+      "grupo": "IMOBILIZADO NOVO",
+      "criterio": "Participação Carteira",
+      "ignorar": true
+    },
+    {
+      "apelido": "IRRF S/ RESGATES",
+      "grupo": "IMOBILIZADO NOVO",
+      "criterio": "Participação Carteira",
+      "ignorar": true
+    }
+  ]
+}
